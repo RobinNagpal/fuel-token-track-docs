@@ -6,6 +6,11 @@
 - Provide commands to verify if the toolchain has been installed properly.
 - Explain a bit about all the main components for creating the application
 
+
+
+## Fuel Tools and Utils
+List of all the Fuel tools and utils that will be used in the example. Only capture the ones we really need to know for the example
+
 | Terms       | Explanation                                                                                                                                                      |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Fuel-Up     | This is the fuel toolchain manager                                                                                                                               |
