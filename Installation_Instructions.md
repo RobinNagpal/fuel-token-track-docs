@@ -1,3 +1,9 @@
+### Todo
+- [ ] Explain in couple of lines that fuel is a blockchain, but also provides tooling making it seamless for
+develops to not only write contracts but also develop front end applications that interacts with the smart contracts.
+- [ ] Explain that there are three main components of the application, the node/blockchain, the smart contracts and the front end application.
+- [ ] Then explain the components present under each of these three main components.
+
 # Installation Instructions
 
 To install the Fuel toolchain, which provides essential tools for developing and interacting with the Fuel blockchain network, you can use the `fuelup-init` script.
