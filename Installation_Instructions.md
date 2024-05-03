@@ -81,7 +81,7 @@ https://github.com/FuelLabs/forc-wallet
 
 A forc plugin for managing Fuel wallets.
 
-### Create a wallet
+#### Create a wallet
 
 Before creating accounts and signing transactions with them you need to create a wallet. To do so:
 
@@ -93,7 +93,7 @@ This will require a password for encrypting the wallet. After the wallet is crea
 
 > Note: You will need your password for signing and account derivation, and you will need your mnemonic phrase if you wish to recover your wallet in the future.
 
-### Import a wallet
+#### Import a wallet
 
 To import a wallet from an existing mnemonic phrase, use:
 
@@ -103,7 +103,7 @@ forc-wallet import
 
 > Note: `forc-wallet` adheres to the [Web3 Secret Storage Definition](https://ethereum.org/en/developers/docs/data-structures-and-encoding/web3-secret-storage) and accepts paths to wallet files that adhere to this standard.
 
-### Create an account
+#### Create an account
 
 To create an account for the wallet, you can run:
 
@@ -119,8 +119,30 @@ To list all accounts derived so far, use the following:
 forc-wallet accounts
 ```
 
+## Sway 
+#### Sway Language Server (`forc-lsp`)
 
+The Sway Language Server `forc-lsp` is provided to expose features to IDEs. [Installation instructions](../lsp/installation.md).
+
+#### Sway Formatter (`forc-fmt`)
+
+A canonical formatter is provided with `forc-fmt`. [Installation instructions](./getting_started.md). It can be run manually with
+
+```sh
+forc fmt
+```
+
+The [Visual Studio Code plugin](https://marketplace.visualstudio.com/items?itemName=FuelLabs.sway-vscode-plugin) will
+automatically format Sway files with `forc-fmt` on save, though you might have to explicitly set the Sway plugin as the
+default formatter, like this:
+
+```json
+"[sway]": {
+  "editor.defaultFormatter": "FuelLabs.sway-vscode-plugin"
+}
+```
 
 ## Other Components
 https://install.fuel.network/master/concepts/components.html
+
 
