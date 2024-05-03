@@ -38,3 +38,30 @@
 
 - Explain deploying the contract to the testnet using forc CLI.
 - Instructions for setting up the wallet locally plus how to transfer test coins using the faucet.
+
+### Storage
+https://fuellabs.github.io/sway/v0.43.2/book/blockchain-development/storage.html
+When developing a smart contract, you will typically need some sort of persistent storage. In this case, persistent 
+storage, often just called storage in this context, is a place where you can store values that are persisted inside 
+the contract itself. This is in contrast to a regular value in memory, which disappears after the contract exits.
+
+Put in conventional programming terms, contract storage is like saving data to a hard drive. That data is saved even 
+after the program which saved it exits. That data is persistent. Using memory is like declaring a variable in a 
+program: it exists for the duration of the program and is non-persistent.
+
+Some basic use cases of storage include declaring an owner address for a contract and saving balances in a wallet.
+
+
+https://fuellabs.github.io/sway/v0.43.2/book/reference/attributes.html#storage
+
+In Sway, functions are pure by default but can be opted into impurity via the storage function attribute. The 
+storage attribute may take read and/or write arguments indicating which type of access the function requires.
+
+The #[storage(read)] attribute indicates that a function requires read access to the storage.
+
+The #[storage(write)] attribute indicates that a function requires write access to the storage.
+
+
+#### Storage Maps
+https://fuellabs.github.io/sway/v0.43.2/book/blockchain-development/storage.html#storage-maps
+
