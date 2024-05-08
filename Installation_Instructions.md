@@ -78,19 +78,18 @@ fuelup --version
 
 This should display the version of the fuelup tool, confirming its installation.
 
-# Forc
+For detailed installation instructions, refer to the [Fuel Installation Guide](https://install.fuel.network/master/).
 
+# Forc
 Forc stands for Fuel Orchestrator. Forc provides a variety of tools and commands for developers working with the Fuel
 ecosystem, such as scaffolding a new project, formatting, running scripts, deploying contracts, testing contracts, and
 more.
 
-#### forc init
+We will be using forc in the Contracts section of this tutorial.
 
-Create a new Forc project in an existing directory.
-
-#### forc new
-
-Create a new Forc project at <path>.
+Some of the important commands provided by forc are:
+- `forc init` - Create a new Forc project in an existing directory.
+- `forc new` -  Create a new Forc project at <path>.
 
 #### forc build
 
