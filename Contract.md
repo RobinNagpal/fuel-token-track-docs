@@ -67,7 +67,7 @@ https://fuellabs.github.io/sway/v0.43.2/book/blockchain-development/storage.html
 
 # Token Track Project
 
-We will be building Token Track project, where we have our own token which we can mint, transfer, and burn. Let's dive straight into creating the project.
+You will be building Token Track project, where you have our own token which you can mint, transfer, and burn. Let's dive straight into creating the project.
 
 To create a forc project, open your terminal, cd into the folder you'd like to keep your project, and run the following command:
 
@@ -133,16 +133,16 @@ A Sway program itself has a type: it is either a contract, a predicate, a script
 
 Every Sway file must begin with a declaration of what type of program it is. A project can have many libraries within it, but only one contract, script, or predicate. Contracts are used primarily for protocols or systems that operate within a fixed set of rules
 
-The next thing we see in the `main.sw` file is an ABI.
+The next thing you see in the `main.sw` file is an ABI.
 
 ### ABI
 
 An ABI defines an interface, and there is no function body in the ABI. A contract must either define or import an ABI declaration and implement it. It is considered best practice to define your ABI in a separate library and import it into your contract because this allows callers of the contract to import and use the ABI in scripts to call your contract.
 
-The next and the last thing in our `main.sw` file is the implementation of the ABI. This is where we write the implementation of the functions defined in our ABI.
+The next and the last thing in the `main.sw` file is the implementation of the ABI. This is where you write the implementation of the functions defined in your ABI.
 
-Now, we have covered the basics of a contract, let's start with writing our own contract for Token Track.
-So we will be creating our own fungible token on the Fuel network using Sway. The token you'll create will possess key functionalities essential for managing a digital currency:
+Now that you have covered the basics of a contract, let's start with writing your own contract for Token Track.
+So you will be creating your own fungible token on the Fuel network using Sway. The token you'll create will possess key functionalities essential for managing a digital currency:
 
 - Minting: Generate new tokens and inject them into circulation.
 
@@ -154,10 +154,10 @@ So we will be creating our own fungible token on the Fuel network using Sway. Th
 
 By following this guide and leveraging the provided Sway code, you'll gain hands-on experience crafting your very own token contract, ready to be deployed on the Fuel network!
 
-Start by removing everything from the file except the the `contract` keyword since we are writing a contract so that won't change.
+Start by removing everything from the file except the the `contract` keyword since you are writing a contract so that won't change.
 
-Since, we are creating a token, we will need some sort of storage in order to track the total circulation of the token as well as a map to keep track of the accounts which hold this token.
-We declare a storage block with the following lines of code:
+Since, you are creating a token, you will need some sort of storage in order to track the total circulation of the token as well as a map to keep track of the accounts which hold this token.
+Declare a storage block with the following lines of code:
 
 ```
 // Define storage variables for the contract
@@ -171,7 +171,7 @@ storage {
 
 When developing a smart contract, you will typically need some sort of persistent storage. In this case, persistent storage, often just called storage in this context, is a place where you can store values that are persisted inside the contract itself. This is in contrast to a regular value in memory, which disappears after the contract exits.
 
-Here, we are defining two variables in our storage:
+Here, you are defining two variables in the storage:
 
 1. `balances` which is a Storage Map. It maps identities to their balances.
 2. `total_supply` which is simply an integer which stores the total number of tokens in circulation.
@@ -193,7 +193,7 @@ pub enum Identity {
 
 - u64: u64 is one of the primitive types in Sway. It is 64-bit unsigned integer.
 
-Next, we define the ABI for our project, we will go over the details of each of these function when we implement them
+Next, you'll define the ABI for your project, we will go over the details of each of these function when we implement them
 
 ```
 // Define the contract's ABI (Application Binary Interface)
@@ -233,7 +233,11 @@ The #[storage(read)] attribute indicates that a function requires read access to
 
 The #[storage(write)] attribute indicates that a function requires write access to the storage.
 
-Now that we've established the concept of ABI and storage, let's delve into the `mint_to_address` function within our Sway contract. This function serves a specific purpose: it allows you to create brand new tokens and credit them directly to a designated address on the Fuel network.
+## Implementation of ABI
+Now that you've established the concept of ABI and storage, let's delve into the `mint_to_address` function within the Sway contract. 
+
+### Minting functionality
+This function serves a specific purpose: it allows you to create brand new tokens and credit them directly to a designated address on the Fuel network.
 Here's a snippet of the mint_to_address function to illustrate its core components:
 
 ```
@@ -388,3 +392,74 @@ The get_balance function is likely a read-only function, meaning it doesn't modi
 1. **Storage Access:** The function retrieves the balances storage map, which stores the current balance for each address or contract that has interacted with your token.
 2. **Balance Lookup:** Using the provided addr (address or contract ID), the function searches the balances storage map for the corresponding balance entry.
 3. **Balance Return:** If a balance entry exists for the provided addr, the function returns the stored value as a u64 integer.
+
+## Building the contract
+
+The "Build" phase is a crucial step in preparing your smart contract for deployment on the Fuel network. Smart contracts are written in high-level languages like Sway for readability and maintainability. The Fuel network, however, operates with bytecode, a low-level machine-readable format.Building bridges the gap by translating your Sway code into bytecode that the Fuel network can understand and execute.
+
+Navigate to your contract folder:
+
+```
+cd token-track
+```
+
+Then run the following command to build your contract:
+
+```
+forc build
+```
+
+### Output
+
+A successful build will generate a new directory named `out` within your contract folder. This directory contains several key files:
+
+- **debug subdirectory:** This folder holds debugging information that can be helpful during development.
+
+  - **counter-contract-abi.json:** This file stores the public Application Binary Interface (ABI) of your contract in JSON format. The ABI defines how other applications and contracts can interact with your functions and variables. Think of it as an instruction manual for external entities to communicate with your contract.
+  - **counter-contract-storage_slots.json:** This file contains details about the storage layout of your contract. It defines how data is persisted within the contract on the blockchain.
+  - **counter-contract.bin:** This is the most crucial output. It's the actual bytecode representation of your Sway code. This file contains the machine-readable instructions that the Fuel network can execute when you deploy your contract.
+
+## Deploying the contract
+
+Now that you have built the contract, next step is to deploy the contract to the testnet. Here's a detailed breakdown of the steps involved, including wallet setup, deployment commands, and a touch on testnets:
+
+1. **Wallet Setup:**
+
+- Before deploying, you'll need a Fuel wallet to pay for the transaction fees associated with deployment.
+- If you don't have a wallet installed, the forc deploy command will guide you through the creation process. This usually involves generating a secure seed phrase that you should keep confidential.
+- Once created, the terminal will ask you to set a password for your wallet. Choose a strong and unique password to safeguard your wallet.
+
+2. **Securing Funds (for Testnet Deployment):**
+
+- You will be deploying your contract to a testnet. Testnets are special blockchain environments that mimic the functionality of a mainnet but operate with fake currency (testnet FUEL tokens).
+- Since you're deploying to a testnet (beta-5 testnet), you'll need testnet coins (FUEL tokens) to cover the deployment fees, you can use the [beta-5 faucet](https://faucet-beta-5.fuel.network/) to get some testnet coins.
+
+3. **The Deployment Command:**
+
+- Once your wallet is set up and funded (with testnet FUEL for deployment fees), you can use the following command to deploy your contract:
+
+```
+forc deploy --testnet
+```
+
+4. **Wallet Interaction and Confirmation:**
+
+- The terminal will prompt you for your wallet's password to unlock it and authorize the deployment transaction. Enter your password securely.
+- The terminal will then display a list of accounts associated with your wallet. Choose the account you want to use for signing the deployment transaction by entering its corresponding index number.
+- Finally, the terminal will ask for your confirmation before proceeding with the deployment. Type Y (yes) if you're ready to deploy.
+
+5. **Deployment Success and Information:**
+
+- Upon successful deployment, the terminal will display valuable information:
+
+  - Network Endpoint: This is the URL of the Fuel network you deployed to (e.g., https://beta-5.fuel.network).
+  - Contract ID: This is a unique identifier for your deployed contract on the blockchain. You'll need this ID to interact with your contract from applications or other contracts.
+  - Deployed in Block: This indicates the block number on the blockchain where your deployment transaction was included.
+
+**Congratulations on Building Your First Fuel Contract!**
+
+You've successfully navigated the process of writing, building, and deploying your first smart contract on the Fuel network. This is a significant milestone in your blockchain development journey!
+
+Ready to Explore Further?
+
+To delve deeper and see the complete code for this contract, check out the project repository [here](https://github.com/RobinNagpal/fuels-token-example-code)
