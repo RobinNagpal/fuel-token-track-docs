@@ -1,16 +1,3 @@
-### Todo
-
-- [ ] Explain in couple of lines that fuel is a blockchain, but also provides tooling making it seamless for
-  develops to not only write contracts but also develop front end applications that interacts with the smart contracts.
-- [ ] Explain that there are three main components of the application, the node/blockchain, the smart contracts and the
-  front end application.
-- [ ] Then explain the components present under each of these three main components.
-
-### Questions
-
-- Should we create a diagram?
-- What is Sway Toolchain? https://fuellabs.github.io/sway/v0.43.2/book/introduction/installation.html
-
 # Blockchain DApps and Fuel
 
 A decentralized application (DApp) is a type of software application that runs on a blockchain network instead of being
@@ -87,7 +74,25 @@ more.
 We will be using forc in the Contracts section of this tutorial.
 
 
-----
+------------
+------------
+------------
+------------
+
+### Todo
+
+- [ ] Explain in couple of lines that fuel is a blockchain, but also provides tooling making it seamless for
+  develops to not only write contracts but also develop front end applications that interacts with the smart contracts.
+- [ ] Explain that there are three main components of the application, the node/blockchain, the smart contracts and the
+  front end application.
+- [ ] Then explain the components present under each of these three main components.
+
+### Questions
+
+- Should we create a diagram?
+- What is Sway Toolchain? https://fuellabs.github.io/sway/v0.43.2/book/introduction/installation.html
+
+
 # Forc wallet
 
 A forc plugin for managing Fuel wallets.
