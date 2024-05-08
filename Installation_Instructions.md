@@ -50,55 +50,8 @@ here https://fuellabs.github.io/sway/v0.43.2/book/introduction/installation.html
 
 # Installation Instructions
 
-To install the Fuel toolchain, which provides essential tools for developing and interacting with the Fuel blockchain
-network, you can use the `fuelup-init` script.
-
-```
-curl https://install.fuel.network | sh
-```
-
-This script will install the following tools in the `~/.fuelup/bin` directory:
-
-- **forc:** A command-line tool specifically designed for working with Fuel smart contracts written in Sway. It offers
-  functionalities like setting up a new Fuel project directory with a basic structure, compiling Sway code into the Fuel
-  VM bytecode, deploying contracts to the network, and more.
-- **forc-fmt:** A tool for formatting Sway code according to Fuel's style guidelines, improving readability and
-  maintainability.
-- **forc-lsp:** Do we need to explain it here?. A Language Server Protocol (LSP) implementation for Sway, providing
-  features like code completion, syntax highlighting, and type checking within code editors.
-- **forc-wallet:** A tool for managing Fuel wallets, including generating keypairs, signing transactions, and
-  interacting with the network.
-- **fuel-core:** The official Fuel client implementation written in Rust. It's responsible for running Fuel nodes,
-  validating transactions. You can think of it as the execution layer of the Fuel blockchain.
-- **fuel-ts**: TODO
--
-
-To verify that the installation was successful, run the following command:
-
-```
-fuelup --version
-```
-
-Many fuelup commands deal with toolchains, a single installation of the Fuel toolchain. fuelup supports two types of 
-toolchains.
-
-This should display the version of the fuelup tool, confirming its installation.
-
-* Sway Toolchain - The Sway toolchain is sufficient to compile Sway smart contracts. Otherwise, note that if you want to run Sway smart contracts (e.g. for testing), a Fuel Core full node is required, which is packaged together with the Sway toolchain together as the Fuel toolchain
-* Fuelup - `fuelup` installs the Fuel toolchain from our official release channels, enabling you to easily keep the toolchain updated.   
-
-
-
-## Install Fuelup
-https://github.com/FuelLabs/fuelup
-
-https://install.fuel.network/master/index.html
-
-
-
-Currently, this script supports Linux/macOS systems only. For other systems, please [read the Installation chapter](https://fuellabs.github.io/fuelup/master/installation/other.html).
-
-Installation is simple: all you need is `fuelup-init.sh`, which downloads the core Fuel binaries needed to get you started on development.
+The Fuel toolchain is your one-stop shop for building amazing things with Sway, a powerful language for creating smart contracts. Think of it as a toolbox packed with everything you need to develop, test, and deploy your Sway creations.
+The Fuel toolchain installation is designed to be quick and easy. All you need is a single script, fuelup-init.sh, which downloads the core Fuel binaries to get you started. Currently, this script supports Linux/macOS systems only. For other systems, please [read the Installation chapter](https://fuellabs.github.io/fuelup/master/installation/other.html).
 
 ```sh
 curl -fsSL https://install.fuel.network/ | sh
@@ -107,8 +60,54 @@ curl -fsSL https://install.fuel.network/ | sh
 
 This will install `forc`, `forc-client`, `forc-fmt`, `forc-crypto`, `forc-debug`, `forc-lsp`, `forc-wallet` as well as `fuel-core` in `~/.fuelup/bin`. The script will ask for permission to add `~/.fuelup/bin` to your `PATH`.
 
+To verify that the installation was successful, run the following command:
 
-## Forc wallet
+```
+fuelup --version
+```
+This should display the version of the fuelup tool, confirming its installation.
+
+
+Many fuelup commands deal with toolchains, a single installation of the Fuel toolchain. fuelup supports two types of toolchains.
+
+1. Distributable toolchains which track the official release channels (e.g., latest, nightly);
+2. Custom toolchains and install individual components in a modular manner.  
+
+
+## Install Fuelup
+https://github.com/FuelLabs/fuelup
+
+https://install.fuel.network/master/index.html
+
+## Components
+Each toolchain has several "components", which are tools used to develop on Fuel.
+
+The `fuelup component` command is used to manage the installed components.
+
+Components can be added to an already-installed toolchain with the fuelup component command:
+
+```
+fuelup component add forc
+```
+
+Next we go through some components installable through fuelup:
+
+### Forc
+Forc stands for Fuel Orchestrator. Forc provides a variety of tools and commands for developers working with the Fuel ecosystem, such as scaffolding a new project, formatting, running scripts, deploying contracts, testing contracts, and more.
+
+#### forc init
+Create a new Forc project in an existing directory.
+
+#### forc new
+Create a new Forc project at <path>.
+
+#### forc build
+Compile the current or target project. The output produced will depend on the project's program type.
+
+#### forc-test
+Run the Sway unit tests for the current project.
+
+### Forc wallet
 https://github.com/FuelLabs/forc-wallet
 
 A forc plugin for managing Fuel wallets.
@@ -150,6 +149,9 @@ To list all accounts derived so far, use the following:
 ```sh
 forc-wallet accounts
 ```
+
+### fuel-core
+Full node implementation of the Fuel v2 protocol, written in Rust.
 
 ## Sway 
 #### Sway Language Server (`forc-lsp`)
