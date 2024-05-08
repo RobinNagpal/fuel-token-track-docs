@@ -11,6 +11,38 @@
 - Should we create a diagram?
 - What is Sway Toolchain? https://fuellabs.github.io/sway/v0.43.2/book/introduction/installation.html
 
+### Blockchain DApps and Fuel
+A decentralized application (DApp) is a type of software application that runs on a blockchain network instead of being hosted on centralized servers. Here’s how the various components interact in a typical blockchain based DApp:
+
+1. **User with a Browser**: This is you or anyone using the DApp through a web browser like Chrome or Firefox. The user interacts with the DApp's interface.
+
+2. **Wallet**: This is a digital wallet (like MetaMask) that holds your cryptocurrencies and manages your blockchain identity. The wallet is necessary for signing transactions and interacting securely with the DApp.
+
+3. **Frontend/UI**: This is the part of the DApp that you see and interact with. It's built using typical web technologies like HTML, CSS, and JavaScript. The frontend communicates with the blockchain through the wallet.
+
+4. **Backend**: Unlike traditional apps, most DApps don’t have a conventional backend (like servers or databases). Instead, the backend logic is mainly handled by smart contracts on the blockchain.
+
+5. **JsonRPC Provider**: This component allows the DApp's frontend to communicate with the Fuel blockchain. It uses a protocol called JSON-RPC to send and receive messages to the blockchain.
+
+6. **Smart Contracts**: These are programs stored on the blockchain that run when predetermined conditions are met. They handle the business logic of the DApp, such as processing transactions or managing data.
+
+7. **Fuel**: This is the blockchain network where the smart contracts are deployed. Fuel provides the environment that allows the smart contracts to run securely and transparently.
+
+8. **Indexer**: This is a tool that reads data from the blockchain and organizes it in a way that makes it easier and faster for the DApp to query and retrieve information. It helps improve the performance and user experience by allowing the frontend to quickly access the data it needs.
+
+[Fuel Dapp](!/assets/images/fuel-dapp.png)
+
+Flow of a typical transaction in this DApp might look like this:
+
+1. **User Interaction**: You interact with the DApp's frontend using your browser.
+2. **Wallet Interaction**: When you make a transaction, like sending tokens or executing a contract function, the frontend sends a transaction request to your wallet.
+3. **Sign Transaction**: Your wallet asks you to sign the transaction, confirming your identity and your approval of the transaction.
+4. **Send Transaction**: Once signed, the wallet sends the transaction to the Fuel blockchain via the JsonRPC Provider.
+5. **Smart Contract Execution**: The transaction is processed on the Fuel blockchain, where the appropriate smart contract is triggered.
+6. **Update and Index**: The results of the transaction are recorded on the blockchain and indexed by the indexer, making them readily accessible for future queries.
+7. **Update UI**: The frontend updates to reflect the new state based on the information from the smart contracts and the indexer.
+
+
 ### Notes
 
 This installation guide is quite good and we should borrow information from
