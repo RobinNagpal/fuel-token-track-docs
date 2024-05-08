@@ -69,6 +69,11 @@ https://fuellabs.github.io/sway/v0.43.2/book/blockchain-development/storage.html
 
 You will be building Token Track project, where you have our own token which you can mint, transfer, and burn. Let's dive straight into creating the project.
 
+Create a new directory you will be keeping all the code.
+```
+mkdir fuel-project
+```
+
 To create a forc project, open your terminal, cd into the folder you'd like to keep your project, and run the following command:
 
 ```
@@ -316,7 +321,7 @@ Let's break down the steps involved when you call the `burn_from_address` functi
 2. **Balance Check and Update:** Before burning, the function performs a safety check. It ensures that the target address has enough balance to cover the specified amount for burning. If sufficient balance exists, the function proceeds to deduct the amount from the target's balance.
 3. **Storage Update:** Finally, the contract diligently updates its records. It stores the updated total supply, reflecting the burned tokens, and the target address's balance, which now has the reduced amount.
 
-Building upon the concept of minting with `burn_from_address`, the `burn_From_contract` function allows you to burn tokens from a contract residing on the Fuel network.
+Building upon the `burn_from_address` function, the `burn_From_contract` function allows you to burn tokens from a contract residing on the Fuel network.
 
 ### Transferring Tokens to Address
 
@@ -365,7 +370,7 @@ Let's break down the steps involved when you call the transfer_coins_to_address 
 3. **Balance Updates:** Assuming sufficient balance, the function debits the coins amount from the sender contract's balance. On the other hand, it credits the same coins amount to the recipient's address, effectively increasing their token holdings.
 4. **Storage Updates:** Finally, the contract meticulously updates its internal storage to reflect the changes. It stores the updated balance of the sender contract, reflecting the transferred tokens, and potentially updates any relevant storage related to the recipient's address (if it's the first time they're receiving tokens).
 
-Building upon the concept of minting with `transfer_coins_to_address`, the `transfer_coins_to_contract` function allows you to transfer tokens another contract residing on the Fuel network.
+Building upon the `transfer_coins_to_address` function, the `transfer_coins_to_contract` function allows you to transfer tokens another contract residing on the Fuel network.
 
 ### Checking Token Balances
 
