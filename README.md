@@ -8,4 +8,6 @@ The full example is documented in four parts:
 |------|-----------------------------------------|------------------------------------------------|
 | 1    | Introduction and Installation           | [LINK](/01_introduction_and_installation.md)   |
 | 2    | Problem Statement and Project Structure | [LINK](/02_problem_statement_and_structure.md) |
+| 3    | Contract Code                           | [LINK](/03_smart_contract.md)                  |
+| 4    | Frontend Code                           | [LINK](/04_frontend.md)                        |
 

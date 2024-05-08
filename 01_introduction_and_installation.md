@@ -31,13 +31,13 @@ reflecting the changes made by the transaction.
 
 Here are some of the tools a developer might use to build a DApp on Fuel and also how it compares to ethereum:
 
-| Tool                         | Description                                                        | Fuel's Equivalent                     | Ethereum's Equivalent    |
-|------------------------------|--------------------------------------------------------------------|---------------------------------------|--------------------------|
-| **Smart Contract Languages** | Language for writing smart contracts on Fuel                       | Sway                                  | Solidity                 |
-| **Deployment Tool**          | Compiles, Runs Test, and Deploys smart contracts to the blockchain | forc, fuels-toolchain                 | Hardhat, Foundry         |
-| **Wallet**                   | Manages blockchain identity and transactions                       | forc-wallet, Wallet Browser Extension | MetaMask                 |
-| **Node**                     | Full node implementation of Fuel                                   | fuel-core                             | Geth                     |
-| **Indexer**                  | Indexes data from the blockchain                                   | fuel-indexer                          | The Graph                |
+| Tool                        | Description                                                        | Fuel's Equivalent                     | Ethereum's Equivalent |
+|-----------------------------|--------------------------------------------------------------------|---------------------------------------|-----------------------|
+| **Smart Contract Language** | Language for writing smart contracts                               | Sway                                  | Solidity              |
+| **Deployment Tool**         | Compiles, Runs Test, and Deploys smart contracts to the blockchain | forc, fuels-toolchain                 | Hardhat, Foundry      |
+| **Wallet**                  | Manages blockchain identity and transactions                       | forc-wallet, Wallet Browser Extension | MetaMask              |
+| **Node**                    | Full node implementation of Fuel                                   | fuel-core                             | Geth                  |
+| **Indexer**                 | Indexes data from the blockchain                                   | fuel-indexer                          | The Graph             |
 
 # Installation Instructions
 
@@ -91,7 +91,6 @@ We will be using forc in the Contracts section of this tutorial.
 
 - Should we create a diagram?
 - What is Sway Toolchain? https://fuellabs.github.io/sway/v0.43.2/book/introduction/installation.html
-
 
 # Forc wallet
 

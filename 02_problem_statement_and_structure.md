@@ -1,24 +1,16 @@
 # TokenTrack Project
+One of the most common use cases for smart contracts is to create a token. In this example, we will create a contract 
+that can mint, burn, and track the balance of a token for a user. We will also create a frontend that will allow us 
+to interact with the contract.
 
-## ToDo
+# UI/UX
+Here is how the UI will look like:
 
-- Explain the problem statement for token track
-- What tools we will be using (both on the frontend as well as the backend).
-- Explain the structure of the project, the directory structure.
-  There shall be a single folder containing the contract code as well as the frontend code. We shall initialize the forc project using the `forc new … ` command. The frontend React code shall be initialized using the `npx create react-app` command.
+The UI allows to:
+- Mint tokens
+- Burn tokens
+- Transfer tokens
+- Check the balance of a user or a wallet
 
-| **Contract** |
-| --- |
-| Fuels CLI |
-| Sway language |
-| Sway Libraries |
-| Rust for Testing |
-| --- |
-| **Frontend** |
-| React |
-| Fuel Browser Wallet |
-| Fuels SDK |
-| --- |
-| **Deployment/Blockchain** |
-| forc |
-| --- |
+# Project Structure
+
