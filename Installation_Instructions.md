@@ -44,40 +44,31 @@ reflecting the changes made by the transaction.
 
 Here are some of the tools a developer might use to build a DApp on Fuel and also how it compares to ethereum:
 
-| Tool                         | Description                                  | Fuel's Equivalent | Ethereum's Equivalent    |
-|------------------------------|----------------------------------------------|-------------------|--------------------------|
-| **Smart Contract Languages** | Language for writing smart contracts on Fuel | Sway              | Solidity                 |
-| **Package Manager**          | Manages dependencies for smart contracts     | forc              | Truffle                  |
-| **Deployment Tool**          | Deploys smart contracts to the blockchain    | forc              | Truffle                  |
-| **Compiler**                 | Converts smart contracts to bytecode         | forc              | solc                     |
-| **Wallet**                   | Manages blockchain identity and transactions | forc-wallet       | MetaMask                 |
-| **Node**                     | Full node implementation of Fuel             | fuel-core         | Geth                     |
-| **Indexer**                  | Indexes data from the blockchain             | fuel-indexer      | The Graph                |
-| **Frontend SDK**             | Libraries for interacting with Fuel Chain    | fuel-ts           | Web3.js, viem, ethers.js |
-| **Backend SDK**              | Libraries for interacting with Fuel Chain    | fuel-ts / fuel-rs | Web3.js, viem, ethers.js |
-| **Testing Framework**        | Framework for testing smart contracts        |                   |                          |
+| Tool                         | Description                                  | Fuel's Equivalent     | Ethereum's Equivalent    |
+|------------------------------|----------------------------------------------|-----------------------|--------------------------|
+| **Smart Contract Languages** | Language for writing smart contracts on Fuel | Sway                  | Solidity                 |
+| **Deployment Tool**          | Deploys smart contracts to the blockchain    | forc, fuels-toolchain | Hardhat, Foundry         |
+| **Wallet**                   | Manages blockchain identity and transactions | forc-wallet           | MetaMask                 |
+| **Node**                     | Full node implementation of Fuel             | fuel-core             | Geth                     |
+| **Indexer**                  | Indexes data from the blockchain             | fuel-indexer          | The Graph                |
+| **Frontend SDK**             | Libraries for interacting with Fuel Chain    | fuel-ts               | Web3.js, viem, ethers.js |
+| **Backend SDK**              | Libraries for interacting with Fuel Chain    | fuel-ts / fuel-rs     | Web3.js, viem, ethers.js |
+| **Testing Framework**        | Framework for testing smart contracts        |                       |                          |
 
-### Notes
-
-This installation guide is quite good and we should borrow information from
-here https://fuellabs.github.io/sway/v0.43.2/book/introduction/installation.html
 
 # Installation Instructions
 
-The Fuel toolchain is your one-stop shop for building amazing things with Sway, a powerful language for creating smart
-contracts. Think of it as a toolbox packed with everything you need to develop, test, and deploy your Sway creations.
-The Fuel toolchain installation is designed to be quick and easy. All you need is a single script, fuelup-init.sh, which
-downloads the core Fuel binaries to get you started. Currently, this script supports Linux/macOS systems only. For other
-systems, please [read the Installation chapter](https://fuellabs.github.io/fuelup/master/installation/other.html).
+`fuelup` is the official package manager for Fuel that installs most of the Fuel's components. `fuel up` installs these 
+components are as part the Fuel Toolchain from the official release channels. 
 
+Using the fuelup, Fuel toolchain will install `forc`, `forc-client`, `forc-fmt`, `forc-crypto`, `forc-debug`, 
+`forc-lsp`, `forc-wallet` as well as `fuel-core`.
+
+Installation is done through the fuelup-init script.sh, which downloads the core Fuel binaries.
 ```sh
 curl -fsSL https://install.fuel.network/ | sh
 ```
-
-<!-- install:example:end -->
-
-This will install `forc`, `forc-client`, `forc-fmt`, `forc-crypto`, `forc-debug`, `forc-lsp`, `forc-wallet` as well
-as `fuel-core` in `~/.fuelup/bin`. The script will ask for permission to add `~/.fuelup/bin` to your `PATH`.
+The script will ask for permission to add `~/.fuelup/bin` to your `PATH`.
 
 To verify that the installation was successful, run the following command:
 
@@ -87,33 +78,7 @@ fuelup --version
 
 This should display the version of the fuelup tool, confirming its installation.
 
-Many fuelup commands deal with toolchains, a single installation of the Fuel toolchain. fuelup supports two types of
-toolchains.
-
-1. Distributable toolchains which track the official release channels (e.g., latest, nightly);
-2. Custom toolchains and install individual components in a modular manner.
-
-## Install Fuelup
-
-https://github.com/FuelLabs/fuelup
-
-https://install.fuel.network/master/index.html
-
-## Components
-
-Each toolchain has several "components", which are tools used to develop on Fuel.
-
-The `fuelup component` command is used to manage the installed components.
-
-Components can be added to an already-installed toolchain with the fuelup component command:
-
-```
-fuelup component add forc
-```
-
-Next we go through some components installable through fuelup:
-
-### Forc
+# Forc
 
 Forc stands for Fuel Orchestrator. Forc provides a variety of tools and commands for developers working with the Fuel
 ecosystem, such as scaffolding a new project, formatting, running scripts, deploying contracts, testing contracts, and
