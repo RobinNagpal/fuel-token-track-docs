@@ -44,30 +44,28 @@ reflecting the changes made by the transaction.
 
 Here are some of the tools a developer might use to build a DApp on Fuel and also how it compares to ethereum:
 
-| Tool                         | Description                                  | Fuel's Equivalent     | Ethereum's Equivalent    |
-|------------------------------|----------------------------------------------|-----------------------|--------------------------|
-| **Smart Contract Languages** | Language for writing smart contracts on Fuel | Sway                  | Solidity                 |
-| **Deployment Tool**          | Deploys smart contracts to the blockchain    | forc, fuels-toolchain | Hardhat, Foundry         |
-| **Wallet**                   | Manages blockchain identity and transactions | forc-wallet           | MetaMask                 |
-| **Node**                     | Full node implementation of Fuel             | fuel-core             | Geth                     |
-| **Indexer**                  | Indexes data from the blockchain             | fuel-indexer          | The Graph                |
-| **Frontend SDK**             | Libraries for interacting with Fuel Chain    | fuel-ts               | Web3.js, viem, ethers.js |
-| **Backend SDK**              | Libraries for interacting with Fuel Chain    | fuel-ts / fuel-rs     | Web3.js, viem, ethers.js |
-| **Testing Framework**        | Framework for testing smart contracts        |                       |                          |
-
+| Tool                         | Description                                                        | Fuel's Equivalent                     | Ethereum's Equivalent    |
+|------------------------------|--------------------------------------------------------------------|---------------------------------------|--------------------------|
+| **Smart Contract Languages** | Language for writing smart contracts on Fuel                       | Sway                                  | Solidity                 |
+| **Deployment Tool**          | Compiles, Runs Test, and Deploys smart contracts to the blockchain | forc, fuels-toolchain                 | Hardhat, Foundry         |
+| **Wallet**                   | Manages blockchain identity and transactions                       | forc-wallet, Wallet Browser Extension | MetaMask                 |
+| **Node**                     | Full node implementation of Fuel                                   | fuel-core                             | Geth                     |
+| **Indexer**                  | Indexes data from the blockchain                                   | fuel-indexer                          | The Graph                |
 
 # Installation Instructions
 
-`fuelup` is the official package manager for Fuel that installs most of the Fuel's components. `fuel up` installs these 
-components are as part the Fuel Toolchain from the official release channels. 
+`fuelup` is the official package manager for Fuel that installs most of the Fuel's components. `fuel up` installs these
+components are as part the Fuel Toolchain from the official release channels.
 
-Using the fuelup, Fuel toolchain will install `forc`, `forc-client`, `forc-fmt`, `forc-crypto`, `forc-debug`, 
+Using the fuelup, Fuel toolchain will install `forc`, `forc-client`, `forc-fmt`, `forc-crypto`, `forc-debug`,
 `forc-lsp`, `forc-wallet` as well as `fuel-core`.
 
 Installation is done through the fuelup-init script.sh, which downloads the core Fuel binaries.
+
 ```sh
 curl -fsSL https://install.fuel.network/ | sh
 ```
+
 The script will ask for permission to add `~/.fuelup/bin` to your `PATH`.
 
 To verify that the installation was successful, run the following command:
@@ -81,27 +79,16 @@ This should display the version of the fuelup tool, confirming its installation.
 For detailed installation instructions, refer to the [Fuel Installation Guide](https://install.fuel.network/master/).
 
 # Forc
+
 Forc stands for Fuel Orchestrator. Forc provides a variety of tools and commands for developers working with the Fuel
 ecosystem, such as scaffolding a new project, formatting, running scripts, deploying contracts, testing contracts, and
 more.
 
 We will be using forc in the Contracts section of this tutorial.
 
-Some of the important commands provided by forc are:
-- `forc init` - Create a new Forc project in an existing directory.
-- `forc new` -  Create a new Forc project at <path>.
 
-#### forc build
-
-Compile the current or target project. The output produced will depend on the project's program type.
-
-#### forc-test
-
-Run the Sway unit tests for the current project.
-
-### Forc wallet
-
-https://github.com/FuelLabs/forc-wallet
+----
+# Forc wallet
 
 A forc plugin for managing Fuel wallets.
 
