@@ -11,7 +11,7 @@
 - Should we create a diagram?
 - What is Sway Toolchain? https://fuellabs.github.io/sway/v0.43.2/book/introduction/installation.html
 
-### Blockchain DApps and Fuel
+# Blockchain DApps and Fuel
 
 A decentralized application (DApp) is a type of software application that runs on a blockchain network instead of being
 hosted on centralized servers. Here’s how the various components interact in a typical blockchain based DApp:
@@ -29,20 +29,33 @@ hosted on centralized servers. Here’s how the various components interact in a
 
 ![Fuel Dapp](https://raw.githubusercontent.com/RobinNagpal/fuels-token-example/main/assets/images/fuel_dapp.png)
 
-Flow of a typical transaction in this DApp might look like this:
+#### Flow of a typical transaction in this DApp might look like this:
 
-1. **User Interaction**: You interact with the DApp's frontend using your browser.
-2. **Wallet Interaction**: When you make a transaction, like sending tokens or executing a contract function, the
-   frontend sends a transaction request to your wallet.
-3. **Sign Transaction**: Your wallet asks you to sign the transaction, confirming your identity and your approval of the
-   transaction.
-4. **Send Transaction**: Once signed, the wallet sends the transaction to the Fuel blockchain via the JsonRPC Provider.
-5. **Smart Contract Execution**: The transaction is processed on the Fuel blockchain, where the appropriate smart
-   contract is triggered.
-6. **Update and Index**: The results of the transaction are recorded on the blockchain and indexed by the indexer,
-   making them readily accessible for future queries.
-7. **Update UI**: The frontend updates to reflect the new state based on the information from the smart contracts and
-   the indexer.
+In a typical DApp transaction, you start by using your browser to interact with the DApp's interface. When you initiate
+a transaction, such as sending tokens or activating a smart contract function, the interface sends this transaction
+request to your digital wallet. Your wallet then prompts you to sign the transaction, which verifies your identity and
+approves the transaction. Once you sign, your wallet sends the transaction over to the Ethereum blockchain through a
+JsonRPC Provider. On the blockchain, the smart contract related to your transaction is activated and executes the
+transaction. After the transaction is completed, the results are recorded on the blockchain and organized by an indexer,
+making the information easily accessible for later use. Finally, the DApp's interface updates to show the new status,
+reflecting the changes made by the transaction.
+
+# Development Tools
+
+Here are some of the tools a developer might use to build a DApp on Fuel and also how it compares to ethereum:
+
+| Tool                         | Description                                  | Fuel's Equivalent | Ethereum's Equivalent    |
+|------------------------------|----------------------------------------------|-------------------|--------------------------|
+| **Smart Contract Languages** | Language for writing smart contracts on Fuel | Sway              | Solidity                 |
+| **Package Manager**          | Manages dependencies for smart contracts     | forc              | Truffle                  |
+| **Deployment Tool**          | Deploys smart contracts to the blockchain    | forc              | Truffle                  |
+| **Compiler**                 | Converts smart contracts to bytecode         | forc              | solc                     |
+| **Wallet**                   | Manages blockchain identity and transactions | forc-wallet       | MetaMask                 |
+| **Node**                     | Full node implementation of Fuel             | fuel-core         | Geth                     |
+| **Indexer**                  | Indexes data from the blockchain             | fuel-indexer      | The Graph                |
+| **Frontend SDK**             | Libraries for interacting with Fuel Chain    | fuel-ts           | Web3.js, viem, ethers.js |
+| **Backend SDK**              | Libraries for interacting with Fuel Chain    | fuel-ts / fuel-rs | Web3.js, viem, ethers.js |
+| **Testing Framework**        | Framework for testing smart contracts        |                   |                          |
 
 ### Notes
 
