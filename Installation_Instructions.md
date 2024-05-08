@@ -30,7 +30,7 @@ A decentralized application (DApp) is a type of software application that runs o
 
 8. **Indexer**: This is a tool that reads data from the blockchain and organizes it in a way that makes it easier and faster for the DApp to query and retrieve information. It helps improve the performance and user experience by allowing the frontend to quickly access the data it needs.
 
-[Fuel Dapp](!/assets/images/fuel-dapp.png)
+![Fuel Dapp](https://raw.githubusercontent.com/RobinNagpal/fuels-token-example/main/assets/images/fuel_dapp.png)
 
 Flow of a typical transaction in this DApp might look like this:
 
