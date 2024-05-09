@@ -1,5 +1,6 @@
 # Create a Smart Contract
-We will be building Token Track project, where we have our own token which we can mint, transfer, and burn. 
+This section will guide us through creating a smart contract for the Token Track project where we can mint, burn, and track the balance of a token for a user.
+
 Let's dive straight into creating the project.
 
 ## Creating a new project
@@ -13,7 +14,7 @@ cd token-track-app/contracts
 ```
 
 ## Initialize a new smart contract
-To create a forc project, open your terminal, cd into the folder we'd like to keep our project, and run the 
+To create a forc project, open the terminal, cd into the folder we'd like to keep our project, and run the 
 following command:
 
 ```
@@ -23,7 +24,7 @@ forc new token-track
 The command uses forc CLI to initialize a new project directory named `token-track`.
 
 ## Generated Project
-After running the `forc new` command, you will see the following files and directories generated in the 
+After running the `forc new` command, we will see the following files and directories generated in the 
 `token-track` directory:
 
 ```
