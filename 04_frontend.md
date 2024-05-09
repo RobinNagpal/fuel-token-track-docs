@@ -65,6 +65,79 @@ The fuels init command generates a `fuels.config.ts` file that is used by the SD
 npx fuels@0.84.0 init --contracts ../contracts/TokenTrack/ --output ./src/sway-contracts-api
 ```
 
+Now that we have a fuels.config.ts file, we can use the fuels build command to rebuild our contract and generate types. Running this command will interpret the output ABI JSON from our contract and generate the correct TypeScript definitions.
+
+Inside the `/frontend` directory run:
+
+```
+npx fuels@0.84.0 build
+```
+
+This will create a folder named `sway-contract-api` which the following files and folders:
+
+```
+.
+├── contracts
+│   ├── TokenTrackAbi.d.ts
+│   ├── TokenTrackAbi.hex.ts
+│   ├── common.d.ts
+│   ├── factories
+│   │   └── TokenTrackAbi__factory.ts
+│   └── index.ts
+└── index.ts
+```
+
+Among these generated files, there are two important classes:
+
+## 1. TokenTrackAbi
+
+The TokenTrackAbi class serves as a typed interface specifically designed to interact with our TokenTrackAbi smart contract.
+The functions property within the class is the heart of this typed interface. It defines each function available in our smart contract, along with the data it expects:
+
+- Function Names: These act as labels, mirroring the actual function names in our contract (e.g., burn_from_address, mint_to_address).
+- Function Arguments: Each function has an array listing its arguments. These arguments come with specific types (like AddressInput, BigNumberish). These types ensure we provide data that matches what the contract expects.
+- Return Types: Similar to arguments, functions can return values. The return type specifies what kind of data the function call might return (e.g., void for functions that don't return anything, BN for functions returning a big number).
+
+### Benefits of typed interface
+
+- Code Clarity: By using this typed interface, our code becomes much easier to understand. We can see at a glance what data each function requires and what it might return.
+- Error Prevention: The type system helps catch errors early on. If we try to use incompatible data, the development tools might warn us before we even run the code. This saves time and frustration!
+
+## 2. TokenTrackAbi\_\_factory
+
+TokenTrackAbi**factory class deals with interacting with our TokenTrackAbi smart contract on the Fuel network. Following we explain some of the key components of the TokenTrackAbi**factory class:
+
+### ABI and Storage Slots:
+
+- **static readonly abi = \_abi:**  
+  This line stores the compiled ABI (Application Binary Interface) of our smart contract. The ABI defines the functions and variables exposed by our contract, allowing our frontend code to interact with them.
+
+- **static readonly storageSlots = \_storageSlots:**  
+  This line holds an array representing the storage layout of our smart contract. This information is used for interacting with the contract's storage variables.
+
+### Interface Creation (createInterface):
+
+- **static createInterface(): TokenTrackAbiInterface:**  
+  This method utilizes the stored ABI to generate a TypeScript interface named TokenTrackAbiInterface. This interface reflects the structure of our contract, providing type safety and code completion for interacting with our contract's functions in our frontend code.
+
+### Contract Connection (connect):
+
+- **static connect(id: string | AbstractAddress, accountOrProvider: Account | Provider): TokenTrackAbi:**  
+  This method allows us to connect our frontend code to a deployed instance of our TokenTrackAbi contract on the Fuel network.
+
+### Contract Deployment (deployContract):
+
+- **static async deployContract(bytecode: BytesLike, wallet: Account, options: DeployContractOptions = {}): Promise<TokenTrackAbi>:**  
+  This asynchronous method is where the deployment functionality comes in. It allows us to deploy a new instance of our TokenTrackAbi contract:
+
+  - bytecode: This argument holds the raw bytecode of our smart contract, compiled for deployment on the Fuel network.
+  - wallet: This refers to the Fuel account or wallet we want to use for deploying the contract (with sufficient funds for gas costs).
+  - options: This optional object let us specify additional deployment parameters like gas price or gas limit.
+
+The method uses a ContractFactory object to handle the deployment process. It provides the contract's bytecode, ABI, wallet information, and the storageSlots to ensure proper storage layout for the new contract.
+
+Finally, it deploys the contract and returns a promise that resolves to a TokenTrackAbi object representing the newly deployed instance.
+
 # Connecting Our Frontend to Fuel: Setting Up the Environment
 
 Now that we have a basic React application structure, let's integrate the necessary components to enable interaction with our Fuel smart contract. This section focuses on setting up the environment within our index.tsx file.
