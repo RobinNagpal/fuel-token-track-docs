@@ -524,6 +524,57 @@ impl MyContract for Contract {
 The project is a _contract_, one of four different project types. For additional information on different project 
 types, see [here](../sway-program-types/index.md).
 
+# Forc wallet
+
+A forc plugin for managing Fuel wallets.
+
+#### Create a wallet
+
+Before creating accounts and signing transactions with them you need to create a wallet. To do so:
+
+```sh
+forc-wallet new
+```
+
+This will require a password for encrypting the wallet. After the wallet is created you will be shown the mnemonic
+phrase.
+
+> Note: You will need your password for signing and account derivation, and you will need your mnemonic phrase if you
+> wish to recover your wallet in the future.
+
+#### Import a wallet
+
+To import a wallet from an existing mnemonic phrase, use:
+
+```sh
+forc-wallet import
+```
+
+> Note: `forc-wallet` adheres to
+>
+the [Web3 Secret Storage Definition](https://ethereum.org/en/developers/docs/data-structures-and-encoding/web3-secret-storage)
+> and accepts paths to wallet files that adhere to this standard.
+
+#### Create an account
+
+To create an account for the wallet, you can run:
+
+```sh
+forc-wallet account new
+```
+
+This will require your wallet password (the one that you chose during creation). This command will always derive the
+next account that has not yet been derived locally.
+
+To list all accounts derived so far, use the following:
+
+```sh
+forc-wallet accounts
+```
+
+
+
+
 ## Contract
 
 #### Syntax of a Smart Contract
