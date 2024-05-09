@@ -110,7 +110,7 @@ We can use `forc` commands like `forc build`, `forc deploy`, etc. in the workspa
 members in the workspace.
 
 # Fuels CLI Commands
-consists of a couple commands, we'll discuss four of the most used ones:
+Below are the useful commands that can be used with the Fuels CLI:
 
 ### 1. `fuels init`
 
