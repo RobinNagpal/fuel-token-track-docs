@@ -1,4 +1,4 @@
-# TokenTrack Project
+# Token Track Project
 
 One of the most common use cases for smart contracts is to create a token. In this example, we will create a contract
 that can mint, burn, and track the balance of a token for a user. We will also create a frontend that will allow us
@@ -63,9 +63,54 @@ The UI allows to:
 - `frontend`: Contains the frontend code. Details on the frontend code will be discussed in the 'Frontend' section.
 - `fuels.config.ts`: Contains the configuration for the Fuels Toolchain.
 
-### fuels.config.ts
+# Fuels CLI
+For this project, we will be using the Fuels CLI to build and deploy our contracts. The Fuels CLI is a command-line 
+tool that helps you to build, deploy, and interact with your smart contracts. It is a wrapper around the `forc` 
+command-line tool. The Fuels CLI can be configured using a `fuels.config.ts` file.
 
-The fuels CLI consists of a couple commands, we'll discuss four of the most used ones:
+### fuels.config.ts
+```typescript
+import { createConfig } from 'fuels';
+
+export default createConfig({
+  contracts: ['contracts/TokenTrack'],
+  output: './frontend/src/sway-api',
+});
+```
+
+In our case, we have specified the `contracts` and `output` fields. 
+- `contracts` field specifies the path to the  contracts directories
+- `output` field specifies the path where the generated files will be saved.
+
+The `fuels.config.ts` configuration consists of following fields:
+```
+workspace?: string;
+contracts?: string[];
+scripts?: string[];
+predicates?: string[];
+output: string;
+useBuiltinForc?: boolean;
+useBuiltinFuelCore?: boolean;
+autoStartFuelCore?: boolean;
+```
+
+The workspace field specifies the path to the workspace directory. In our case, we have are not using the workspace
+and have specified the contracts field. 
+
+# Workspace
+A workspace is a collection of one or more packages, namely workspace members, that are managed together.
+
+Workspace manifests are declared within `Forc.toml` files and it looks like this:
+
+```toml
+[workspace]
+members = ["TokenTrack"]
+``` 
+We can use `forc` commands like `forc build`, `forc deploy`, etc. in the workspace directory to build and deploy all the
+members in the workspace.
+
+# Fuels CLI Commands
+consists of a couple commands, we'll discuss four of the most used ones:
 
 ### 1. `fuels init`
 
@@ -160,3 +205,5 @@ The fuels dev command does three things:
     1. Auto-start a short-lived fuel-core node (docs)
     2. Runs build and deploy once at the start
     3. Watches your Forc workspace and repeats previous step on every change
+
+You can learn more about the fuels CLI [here](https://fuellabs.github.io/fuels-ts/guide/fuels-cli/)
