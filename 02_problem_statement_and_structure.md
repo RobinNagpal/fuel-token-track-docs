@@ -63,12 +63,12 @@ The UI allows to:
 - `frontend`: Contains the frontend code. Details on the frontend code will be discussed in the 'Frontend' section.
 - `fuels.config.ts`: Contains the configuration for the Fuels Toolchain.
 
-# Fuels CLI
+## Fuels CLI
 For this project, we will be using the Fuels CLI to build and deploy our contracts. The Fuels CLI is a command-line 
 tool that helps you to build, deploy, and interact with your smart contracts. It is a wrapper around the `forc` 
 command-line tool. The Fuels CLI can be configured using a `fuels.config.ts` file.
 
-### fuels.config.ts
+#### fuels.config.ts
 ```typescript
 import { createConfig } from 'fuels';
 
@@ -97,7 +97,10 @@ autoStartFuelCore?: boolean;
 The workspace field specifies the path to the workspace directory. In our case, we have are not using the workspace
 and have specified the contracts field. 
 
-# Workspace
+For other properties in this file you can visit [here](https://docs.fuel.network/docs/nightly/fuels-ts/fuels-cli/config-file/)
+## Workspace
+Note: We will just touch upon the workspace concept here as it is not used in this example. . For more details, you can refer to the official documentation.
+
 A workspace is a collection of one or more packages, namely workspace members, that are managed together.
 
 Workspace manifests are declared within `Forc.toml` files and it looks like this:
@@ -109,40 +112,14 @@ members = ["TokenTrack"]
 We can use `forc` commands like `forc build`, `forc deploy`, etc. in the workspace directory to build and deploy all the
 members in the workspace.
 
-# Fuels CLI Commands
+## Fuels CLI Commands
 Below are the useful commands that can be used with the Fuels CLI:
 
-### 1. `fuels init`
+#### 1. `fuels init`
 
 The `fuels init` command helps you to create a sample `fuel.config.ts` file.
 
-Assuming, we are at `./frontend`, run this command to generate `fuel.config.ts` file:
-
-```
-npx fuels@0.84.0 init --contracts ../contracts/TokenTrack/ --output ./src/sway-contracts-api
-```
-
-This will give you a minimal configuration:
-
-```
-import { createConfig } from 'fuels';
-
-export default createConfig({
-  contracts: [
-        '../contracts/TokenTrack',
-  ],
-  output: './src/sway-contracts-api',
-});
-```
-
-This config file contains two key elements:
-
-1. `contracts`: List of relative directory paths to Sway contracts.
-2. `output`: Relative directory path to use when generating Typescript definitions.
-
-For other properties in this file you can visit [here](https://docs.fuel.network/docs/nightly/fuels-ts/fuels-cli/config-file/)
-
-### 2. `fuels build`
+#### 2. `fuels build`
 
 The `fuels build` command basically has two purposes:
 
@@ -160,11 +137,10 @@ Using the --deploy flag will additionally:
 
 ### 3. `fuels deploy`
 
-    The fuels deploy command does two things:
+The fuels deploy command does two things:
 
-        1. Deploy all Sway contracts under workspace.
-        2. Saves their deployed IDs to:
-            ./src/sway-programs-api/contract-ids.json
+1. Deploy all Sway contracts under workspace.
+2. Saves their deployed IDs to: `{output_in_config_file}/contract-ids.json`
 
 ```
 {
@@ -173,26 +149,8 @@ Using the --deploy flag will additionally:
 }
 ```
 
-Use it when instantiating your contracts:
-
-```
-import { SampleAbi__factory } from './sway-programs-api';
-import contractsIds from './sway-programs-api/contract-ids.json';
-
-/**
-  * Get IDs using:
-  *   contractsIds.<my-contract-name>
-  */
-
-const wallet = new Wallet.fromPrivateKey(process.env.PRIVATE_KEY);
-const contract = SampleAbi__factory.connect(contractsIds.sample, wallet);
-
-const { value } = await contract.functions.return_input(1337).dryRun();
-
-expect(value.toHex()).toEqual(toHex(1337));
-```
-
-Note: It is recommended using the `fuels deploy` command only when you are deploying contracts to a local node. If you are deploying contracts to a live network like the Testnet, it is recommended using the `forc deploy` command instead.
+Note: It is recommended using the `fuels deploy` command only when you are deploying contracts to a local node. If you 
+are deploying contracts to a live network like the Testnet, it is recommended using the `forc deploy` command instead.
 
 ### 4. `fuels dev`
 
@@ -201,9 +159,7 @@ npx fuels@0.84.0 dev
 ```
 
 The fuels dev command does three things:
+1. Auto-start a short-lived fuel-core node (docs)
+2. Runs build and deploy once at the start
+3. Watches your Forc workspace and repeats previous step on every change
 
-    1. Auto-start a short-lived fuel-core node (docs)
-    2. Runs build and deploy once at the start
-    3. Watches your Forc workspace and repeats previous step on every change
-
-You can learn more about the fuels CLI [here](https://fuellabs.github.io/fuels-ts/guide/fuels-cli/)
