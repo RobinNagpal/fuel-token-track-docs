@@ -1,6 +1,7 @@
 # Create a Smart Contract
 
-This section will guide us through creating a smart contract for the Token Track project where we can mint, burn, and track the balance of a token for a user.
+This section will guide us through creating a smart contract for the Token Track project where we can mint, burn, and 
+track the balance of a token for a user.
 
 Let's dive straight into creating the project.
 
@@ -8,13 +9,13 @@ Let's dive straight into creating the project.
 
 Create a new directory where we will be keeping all the code.
 
-```
+```shell
 mkdir -p token-track-app/contracts
 ```
 
 Navigate to the contracts directory.
 
-```
+```shell
 cd token-track-app/contracts
 ```
 
@@ -23,7 +24,7 @@ cd token-track-app/contracts
 To create a forc project, open the terminal, cd into the folder we'd like to keep our project, and run the
 following command:
 
-```
+```shell
 forc new token-track
 ```
 
@@ -119,13 +120,10 @@ Now that we have covered the basics of a contract, let's start with writing our 
 So we will be creating our own fungible token on the Fuel network using Sway. The token we'll create will possess
 key functionalities essential for managing a digital currency:
 
-- Minting: Generate new tokens and inject them into circulation.
-
-- Burning: Remove existing tokens from circulation, effectively taking them out of the game.
-
-- Transferring: Send tokens between different Address and Contracts on the Fuel network.
-
-- Balance Tracking: Keep a record of how many tokens each address or contract holds.
+- **Minting**: Generate new tokens and inject them into circulation.
+- **Burning**: Remove existing tokens from circulation, effectively taking them out of the game.
+- **Transferring**: Send tokens between different Address and Contracts on the Fuel network.
+- **Balance Tracking**: Keep a record of how many tokens each address or contract holds.
 
 By following this guide and leveraging the provided Sway code, we'll gain hands-on experience crafting our very own
 token contract, ready to be deployed on the Fuel network!
@@ -133,12 +131,13 @@ token contract, ready to be deployed on the Fuel network!
 Start by removing everything from the file except the the `contract` keyword since we are writing a contract so
 that won't change.
 
+## Storage
 Since, we are creating a token, we will need some sort of storage in order to track the total circulation of the
 token as well as a map to keep track of the accounts which hold this token.
 
 Declare a storage block with the following lines of code:
 
-```
+```rust
 // Define storage variables for the contract
 storage {
     // `balances` is a StorageMap that maps identities to their u64 balances
@@ -159,24 +158,26 @@ Here, we are defining two variables in the storage:
 
 There are a few terms which might be confusing. Let's go over them one by one:
 
-- Identites: The Identity type is an enum that allows for the handling of both Address and ContractId types. This is useful in cases where either type is accepted, e.g. receiving funds from an identified sender, but not caring if the sender is an address or a contract.
+- **Identity**: The Identity type is an enum that allows for the handling of both Address and ContractId types. This is 
+useful in cases where either type is accepted, e.g. receiving funds from an identified sender, but not caring if 
+the sender is an address or a contract.
+  An Identity is implemented as follows.
 
-An Identity is implemented as follows.
+  ```rust
+  pub enum Identity {
+      Address: Address,
+      ContractId: ContractId,
+  }
+  ```
+- **Storage Maps**: Generic storage maps are available in the standard library as StorageMap<K, V> which have to be 
+defined inside a storage block and allows us to call insert() and get() to insert values at specific keys and get those 
+values respectively. Refer to Storage Maps for more information about StorageMap<K, V>.
+- **u64**: u64 is one of the primitive types in Sway. It is 64-bit unsigned integer.
 
-```
-pub enum Identity {
-    Address: Address,
-    ContractId: ContractId,
-}
-```
-
-- Storage Maps: Generic storage maps are available in the standard library as StorageMap<K, V> which have to be defined inside a storage block and allows us to call insert() and get() to insert values at specific keys and get those values respectively. Refer to Storage Maps for more information about StorageMap<K, V>.
-
-- u64: u64 is one of the primitive types in Sway. It is 64-bit unsigned integer.
-
+## ABI
 Next, we'll define the ABI for our project, we will go over the details of each of these function when we implement them
 
-```
+```rust
 // Define the contract's ABI (Application Binary Interface)
 abi MyContract {
     // Function to mint new tokens for a specific address recipient with an amount
@@ -208,36 +209,39 @@ abi MyContract {
 }
 ```
 
-In Sway, functions are pure (does not access any persistent storage) by default but can be opted into impurity via the storage function attribute. The storage attribute may take read and/or write arguments indicating which type of access the function requires.
+In Sway, functions are pure (does not access any persistent storage) by default but can be opted into impurity via the 
+storage function attribute. The storage attribute may take read and/or write arguments indicating which type of access 
+the function requires.
 
 The #[storage(read)] attribute indicates that a function requires read access to the storage.
 
 The #[storage(write)] attribute indicates that a function requires write access to the storage.
 
-## Implementation of ABI
+## Contract Code - Implementation of ABI
 
-Now that we've established the concept of ABI and storage, let's delve into the `mint_to_address` function within the Sway contract.
+Now that we've established the concept of ABI and storage, let's delve into the `mint_to_address` function within the 
+Sway contract.
 
-### Minting functionality
+#### Minting functionality
 
 This function serves a specific purpose: it allows us to create brand new tokens and credit them directly to a designated address on the Fuel network.
 Here's a snippet of the mint_to_address function to illustrate its core components:
 
-```
+```rust
 #[storage(read, write)]
-    fn mint_to_address(recipient: Address, amount: u64) {
-        // Read the current total supply from storage
-        storage
-            .total_supply
-            .write(amount + storage.total_supply.read());
+fn mint_to_address(recipient: Address, amount: u64) {
+    // Read the current total supply from storage
+    storage
+        .total_supply
+        .write(amount + storage.total_supply.read());
 
-        let b256_addr = recipient.into();
-        // Access the sender's balance (or initialize it to 0 if it doesn't exist)
-        let identity: Identity = Identity::Address(Address::from(b256_addr)); // Casting Address to Identity
-        let mut balance = storage.balances.get(identity).try_read().unwrap_or(0);
-        balance += amount;
-        storage.balances.insert(identity, balance);
-    }
+    let b256_addr = recipient.into();
+    // Access the sender's balance (or initialize it to 0 if it doesn't exist)
+    let identity: Identity = Identity::Address(Address::from(b256_addr)); // Casting Address to Identity
+    let mut balance = storage.balances.get(identity).try_read().unwrap_or(0);
+    balance += amount;
+    storage.balances.insert(identity, balance);
+}
 ```
 
 As we can see, the function takes two arguments:
@@ -264,28 +268,28 @@ Imagine taking tokens out of circulation, effectively reducing their total suppl
 
 Here's a snippet of the burn_from_address function to illustrate its core components:
 
-```
+```rust
 #[storage(read, write)]
-    fn burn_from_address(target: Address, amount: u64) {
-        // Read the current total supply from storage
-        storage
-            .total_supply
-            .write(storage.total_supply.read() - amount);
+fn burn_from_address(target: Address, amount: u64) {
+    // Read the current total supply from storage
+    storage
+        .total_supply
+        .write(storage.total_supply.read() - amount);
 
-        let b256_addr = target.into();
-        let identity: Identity = Identity::Address(Address::from(b256_addr)); // Casting Address to Identity
-        // Access the target's balance (or initialize it to 0 if it doesn't exist)
-        let mut target_balance = storage.balances.get(identity).try_read().unwrap_or(0);
+    let b256_addr = target.into();
+    let identity: Identity = Identity::Address(Address::from(b256_addr)); // Casting Address to Identity
+    // Access the target's balance (or initialize it to 0 if it doesn't exist)
+    let mut target_balance = storage.balances.get(identity).try_read().unwrap_or(0);
 
-        // Ensure sufficient balance before burning
-        assert(target_balance >= amount);
+    // Ensure sufficient balance before burning
+    assert(target_balance >= amount);
 
-        // Update the target's balance after burning
-        target_balance -= amount;
+    // Update the target's balance after burning
+    target_balance -= amount;
 
-        // Store the updated balance back in the storage map
-        storage.balances.insert(identity, target_balance);
-    }
+    // Store the updated balance back in the storage map
+    storage.balances.insert(identity, target_balance);
+}
 ```
 
 As we can see, the function takes two arguments:
@@ -307,32 +311,32 @@ Token transfers are fundamental operations that enable users to move our tokens 
 
 Here's a snippet of the `transfer_coins_to_address` function to illustrate its core components:
 
-```
+```rust
 #[storage(read, write)]
-    fn transfer_coins_to_address(coins: u64, from: Address, target: Address) {
-        let b256_addr_from = from.into();
-        // Access the sender's balance (or initialize it to 0 if it doesn't exist)
-        let identity_from: Identity = Identity::Address(Address::from(b256_addr_from)); // Casting Address to Identity
-        let mut from_balance = storage.balances.get(identity_from).try_read().unwrap_or(0);
+fn transfer_coins_to_address(coins: u64, from: Address, target: Address) {
+  let b256_addr_from = from.into();
+  // Access the sender's balance (or initialize it to 0 if it doesn't exist)
+  let identity_from: Identity = Identity::Address(Address::from(b256_addr_from)); // Casting Address to Identity
+  let mut from_balance = storage.balances.get(identity_from).try_read().unwrap_or(0);
 
-        // Ensure sufficient balance before transferring
-        require(from_balance >= coins, "Not enough tokens");
+  // Ensure sufficient balance before transferring
+  require(from_balance >= coins, "Not enough tokens");
 
-        // Update the sender's balance after transferring
-        from_balance -= coins;
+  // Update the sender's balance after transferring
+  from_balance -= coins;
 
-        let b256_addr_to = target.into();
-        // Access the recipient's balance (or initialize it to 0 if it doesn't exist)
-        let identity_to: Identity = Identity::Address(Address::from(b256_addr_to)); // Casting Address to Identity
-        let mut target_balance = storage.balances.get(identity_to).try_read().unwrap_or(0);
+  let b256_addr_to = target.into();
+  // Access the recipient's balance (or initialize it to 0 if it doesn't exist)
+  let identity_to: Identity = Identity::Address(Address::from(b256_addr_to)); // Casting Address to Identity
+  let mut target_balance = storage.balances.get(identity_to).try_read().unwrap_or(0);
 
-        // Update the recipient's balance with the transferred amount
-        target_balance += coins;
+  // Update the recipient's balance with the transferred amount
+  target_balance += coins;
 
-        // Store the updated balances back in the storage map
-        storage.balances.insert(identity_from, from_balance);
-        storage.balances.insert(identity_to, target_balance);
-    }
+  // Store the updated balances back in the storage map
+  storage.balances.insert(identity_from, from_balance);
+  storage.balances.insert(identity_to, target_balance);
+}
 ```
 
 As we can see, the function takes three arguments:
@@ -356,11 +360,11 @@ A balance represents the number of tokens held by a particular address or contra
 
 Here's a snippet of the `get_balance` function to illustrate its core components:
 
-```
-    #[storage(read)]
-    fn get_balance(addr: Identity) -> u64 {
-        return storage.balances.get(addr).try_read().unwrap_or(0);
-    }
+```rust
+#[storage(read)]
+fn get_balance(addr: Identity) -> u64 {
+  return storage.balances.get(addr).try_read().unwrap_or(0);
+}
 ```
 
 As we can see, the function takes one argument and returns an integer:
@@ -382,13 +386,13 @@ The "Build" phase is a crucial step in preparing our smart contract for deployme
 
 Navigate to the contract folder:
 
-```
+```shell
 cd token-track
 ```
 
 Then run the following command to build the contract:
 
-```
+```shell
 forc build
 ```
 
@@ -421,7 +425,7 @@ Now that we have built the contract, next step is to deploy the contract to the 
 
 - Once our wallet is set up and funded (with testnet FUEL for deployment fees), we can use the following command to deploy our contract:
 
-```
+```shell
 forc deploy --testnet
 ```
 
