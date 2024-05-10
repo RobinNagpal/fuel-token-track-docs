@@ -168,13 +168,12 @@ In Sway, functions are by default pure, meaning they do not access any persisten
 
 ## Contract Code - Implementation of ABI
 
-Now that we've established the concept of ABI and storage, let's delve into the `mint_to_address` function within the 
-Sway contract.
+Now that we understand the ABI and storage, let's examine the `mint_to_address` function in our Sway contract.
 
-#### Minting functionality
+### Minting Functionality
 
-This function serves a specific purpose: it allows us to create brand new tokens and credit them directly to a designated address on the Fuel network.
-Here's a snippet of the mint_to_address function to illustrate its core components:
+This function is designed to create new tokens and add them directly to a specific address on the Fuel network. Here's 
+the essential code for the `mint_to_address` function:
 
 ```rust
 #[storage(read, write)]
@@ -182,40 +181,40 @@ fn mint_to_address(recipient: Address, amount: u64) {
     // Read the current total supply from storage
     storage
         .total_supply
-        .write(amount + storage.total_supply.read());
+        .write(storage.total_supply.read() + amount);
 
     let b256_addr = recipient.into();
-    // Access the sender's balance (or initialize it to 0 if it doesn't exist)
-    let identity: Identity = Identity::Address(Address::from(b256_addr)); // Casting Address to Identity
+    // Access the sender's balance or initialize it to 0 if it doesn't exist
+    let identity: Identity = Identity::Address(Address::from(b256_addr));
     let mut balance = storage.balances.get(identity).try_read().unwrap_or(0);
     balance += amount;
     storage.balances.insert(identity, balance);
 }
 ```
 
-As we can see, the function takes two arguments:
+The function takes two parameters:
 
-- **recipient (Address):** This specifies the address that will receive the newly minted tokens. Imagine this as the target wallet or account where the fresh tokens will be deposited.
-- **amount (u64):** This defines the quantity of tokens to be minted. This value determines how many new tokens will be created and credited to the recipient.
+- **recipient (Address)**: The address that will receive the newly minted tokens.
+- **amount (u64)**: The number of tokens to mint.
 
-Let's break down the steps involved when we call the mint_to_address function:
+Steps involved in the `mint_to_address` function:
 
-1. **Total Supply Update:** The contract first keeps track of the total number of tokens in circulation. The function begins by reading the current total supply stored in the contract.
-2. **Minting and Balance Update:** Next, it adds the specified amount of new tokens to the existing total supply. Additionally, it retrieves the balance of the recipient address (initializing it to 0 if the address hasn't received any tokens yet).
-3. **Balance Update:** The magic happens here! The function credits the recipient's address with the minted tokens. It essentially adds the amount of newly minted tokens to the recipient's existing balance.
-4. **Storage Update:** Finally, the contract doesn't forget to update its records. The function stores the incremented total supply, reflecting the newly minted tokens, along with the recipient's updated balance, which now includes the minted amount.
+1. **Update Total Supply**: It reads the current total supply and adds the new tokens.
+2. **Mint and Update Balance**: It then updates the balance of the recipient, initializing it to 0 if not previously set, and adds the new tokens.
+3. **Record Updates**: Finally, it updates the storage with the new total supply and the recipient’s updated balance.
 
-Building upon the concept of minting with `mint_to_address`, the `mint_to_contract` function allows us to mint new tokens and credit them to another contract residing on the Fuel network.
+This method for creating tokens is mirrored by the `mint_to_contract` function, which credits new tokens to a 
+contract on the Fuel network.
 
 ### Burning Tokens from Addresses
 
-The burn_from_address function serves a critical purpose in our token's lifecycle: it enables us to remove existing tokens from circulation by burning them from a specific address on the Fuel network.
+The `burn_from_address` function is crucial for managing the lifecycle of our tokens by removing tokens from circulation from a specified address.
 
-#### Understanding Burning:
+#### Understanding Burning
 
-Imagine taking tokens out of circulation, effectively reducing their total supply. Burning achieves this by rendering the tokens unusable. This mechanism can be employed for various reasons, such as implementing deflationary models or burning a portion of transaction fees.
+Burning tokens reduces their total supply, making them unusable. This is often used to control inflation or to burn transaction fees.
 
-Here's a snippet of the burn_from_address function to illustrate its core components:
+Here's the core code for the `burn_from_address` function:
 
 ```rust
 #[storage(read, write)]
@@ -226,37 +225,38 @@ fn burn_from_address(target: Address, amount: u64) {
         .write(storage.total_supply.read() - amount);
 
     let b256_addr = target.into();
-    let identity: Identity = Identity::Address(Address::from(b256_addr)); // Casting Address to Identity
-    // Access the target's balance (or initialize it to 0 if it doesn't exist)
+    let identity: Identity = Identity::Address(Address::from(b256_addr));
+    // Access the target's balance or initialize it to 0 if it doesn't exist
     let mut target_balance = storage.balances.get(identity).try_read().unwrap_or(0);
 
-    // Ensure sufficient balance before burning
+    // Check sufficient balance before burning
     assert(target_balance >= amount);
 
     // Update the target's balance after burning
     target_balance -= amount;
 
-    // Store the updated balance back in the storage map
+    // Update the storage with the new balance
     storage.balances.insert(identity, target_balance);
 }
 ```
 
-As we can see, the function takes two arguments:
+The function takes two parameters:
 
-- **target (Address):** This parameter identifies the address from which tokens will be burned. Think of it as the source account whose token balance will be reduced.
-- **amount (u64):** This value specifies the quantity of tokens to be burned. It defines how many tokens will be removed from the total supply and the target address's balance.
+- **target (Address)**: The address from which tokens will be burned.
+- **amount (u64)**: The quantity of tokens to burn.
 
-Let's break down the steps involved when we call the `burn_from_address` function:
+Steps involved in the `burn_from_address` function:
 
-1. **Total Supply Update:** Similar to minting, burning also affects the total supply. The function starts by reading the current total supply stored in the contract and deducting the amount to be burnt.
-2. **Balance Check and Update:** Before burning, the function performs a safety check. It ensures that the target address has enough balance to cover the specified amount for burning. If sufficient balance exists, the function proceeds to deduct the amount from the target's balance.
-3. **Storage Update:** Finally, the contract diligently updates its records. It stores the updated total supply, reflecting the burned tokens, and the target address's balance, which now has the reduced amount.
+1. **Update Total Supply**: It decreases the total supply by the amount to be burned.
+2. **Check and Update Balance**: Ensures the target has sufficient balance, then deducts the burned amount.
+3. **Record Updates**: Updates the storage with the decreased total supply and new balance.
 
-Building upon the `burn_from_address` function, the `burn_From_contract` function allows us to burn tokens from a contract residing on the Fuel network.
+Similarly, the `burn_from_contract` function enables token burning from a contract on the Fuel network.
 
-### Transferring Tokens to Address
 
-Token transfers are fundamental operations that enable users to move our tokens between their wallets or accounts on the Fuel network. This function facilitates these transfers, acting as a bridge between user addresses.
+### Transferring Tokens to Addresses
+
+Token transfers are essential operations that allow users to move tokens between wallets or accounts on the Fuel network. This function makes these transfers possible, acting as a bridge between user addresses.
 
 Here's a snippet of the `transfer_coins_to_address` function to illustrate its core components:
 
@@ -264,8 +264,8 @@ Here's a snippet of the `transfer_coins_to_address` function to illustrate its c
 #[storage(read, write)]
 fn transfer_coins_to_address(coins: u64, from: Address, target: Address) {
   let b256_addr_from = from.into();
-  // Access the sender's balance (or initialize it to 0 if it doesn't exist)
-  let identity_from: Identity = Identity::Address(Address::from(b256_addr_from)); // Casting Address to Identity
+  // Access the sender's balance or initialize it to 0 if it doesn't exist
+  let identity_from: Identity = Identity::Address(Address::from(b256_addr_from));
   let mut from_balance = storage.balances.get(identity_from).try_read().unwrap_or(0);
 
   // Ensure sufficient balance before transferring
@@ -275,8 +275,8 @@ fn transfer_coins_to_address(coins: u64, from: Address, target: Address) {
   from_balance -= coins;
 
   let b256_addr_to = target.into();
-  // Access the recipient's balance (or initialize it to 0 if it doesn't exist)
-  let identity_to: Identity = Identity::Address(Address::from(b256_addr_to)); // Casting Address to Identity
+  // Access the recipient's balance or initialize it to 0 if it doesn't exist
+  let identity_to: Identity = Identity::Address(Address::from(b256_addr_to));
   let mut target_balance = storage.balances.get(identity_to).try_read().unwrap_or(0);
 
   // Update the recipient's balance with the transferred amount
@@ -288,24 +288,24 @@ fn transfer_coins_to_address(coins: u64, from: Address, target: Address) {
 }
 ```
 
-As we can see, the function takes three arguments:
+The function takes three arguments:
 
-- **coins: u64:** This parameter defines the quantity of tokens to be transferred. It specifies how many tokens will be moved from the contract.
-- **from: ContractId:** This identifies the contract acting as the sender, initiating the transfer of tokens to the address.
-- **target: Address:** This specifies the recipient address that will receive the transferred tokens. Think of it as the destination wallet or account where the tokens will be deposited.
+- **coins (u64):** The quantity of tokens to be transferred.
+- **from (Address):** The sender's address initiating the token transfer.
+- **target (Address):** The recipient address that will receive the tokens.
 
-Let's break down the steps involved when we call the transfer_coins_to_address function:
+Steps involved in the `transfer_coins_to_address` function:
 
-1. **Balance Checks:** The function likely performs crucial safety checks. It ensures that the sender contract has enough balance to cover the requested coins amount for transfer.
-2. **Insufficient Balance Handling:** If the balance check fails (meaning the sender contract doesn't have enough tokens), the function might raise an error or revert the transaction to prevent an invalid transfer.
-3. **Balance Updates:** Assuming sufficient balance, the function debits the coins amount from the sender contract's balance. On the other hand, it credits the same coins amount to the recipient's address, effectively increasing their token holdings.
-4. **Storage Updates:** Finally, the contract meticulously updates its internal storage to reflect the changes. It stores the updated balance of the sender contract, reflecting the transferred tokens, and potentially updates any relevant storage related to the recipient's address (if it's the first time they're receiving tokens).
+1. **Balance Checks:** It checks that the sender has enough tokens to cover the transfer.
+2. **Insufficient Balance Handling:** If there are not enough tokens, the transaction is stopped to prevent an invalid transfer.
+3. **Balance Updates:** If the balance is sufficient, it deducts the specified amount from the sender's balance and adds it to the recipient's balance.
+4. **Storage Updates:** Finally, it updates the storage to reflect the new balances of both the sender and the recipient.
 
-Building upon the `transfer_coins_to_address` function, the `transfer_coins_to_contract` function allows us to transfer tokens another contract residing on the Fuel network.
+The `transfer_coins_to_contract` function builds on this by allowing token transfers to another contract on the Fuel network.
 
 ### Checking Token Balances
 
-A balance represents the number of tokens held by a particular address or contract. This function acts as a window into the token distribution, allowing us to query and retrieve this information.
+This function provides a view into how many tokens each address or contract holds.
 
 Here's a snippet of the `get_balance` function to illustrate its core components:
 
@@ -316,22 +316,20 @@ fn get_balance(addr: Identity) -> u64 {
 }
 ```
 
-As we can see, the function takes one argument and returns an integer:
+The function takes one argument and returns an integer:
 
-- **addr: Identity:** This parameter acts as the key. It specifies the address or contract ID for which we want to retrieve the balance.
-  Function Return Value:
+- **addr (Identity):** This parameter specifies the address or contract ID whose balance we want to retrieve.
+- **u64:** It returns the token balance associated with the specified identity.
 
-- **u64:** The function returns an unsigned 64-bit integer representing the token balance associated with the provided addr.
+The `get_balance` function is read-only and does not modify the contract's storage. Here's how it works:
 
-The get_balance function is likely a read-only function, meaning it doesn't modify the contract's storage. Here's a simplified breakdown of its functionality:
+1. **Storage Access:** It accesses the balances storage map, which keeps track of each token holder's balance.
+2. **Balance Lookup:** It looks up the balance using the specified identity.
+3. **Balance Return:** If a balance entry exists, it returns the stored value as an integer.
 
-1. **Storage Access:** The function retrieves the balances storage map, which stores the current balance for each address or contract that has interacted with our token.
-2. **Balance Lookup:** Using the provided addr (address or contract ID), the function searches the balances storage map for the corresponding balance entry.
-3. **Balance Return:** If a balance entry exists for the provided addr, the function returns the stored value as a u64 integer.
+## Building the Contract
 
-## Building the contract
-
-The "Build" phase is a crucial step in preparing our smart contract for deployment on the Fuel network. Smart contracts are written in high-level languages like Sway for readability and maintainability. The Fuel network, however, operates with bytecode, a low-level machine-readable format. Building bridges the gap by translating our Sway code into bytecode that the Fuel network can understand and execute.
+The "Build" phase is essential in preparing our smart contract for deployment on the Fuel network. Smart contracts are typically written in high-level languages like Sway, which are easy to read and maintain. However, the Fuel network operates with bytecode, a low-level machine-readable format. The building process translates our Sway code into bytecode that the Fuel network can execute.
 
 Navigate to the contract folder:
 
@@ -339,7 +337,7 @@ Navigate to the contract folder:
 cd token-track
 ```
 
-Then run the following command to build the contract:
+Then run the command to build the contract:
 
 ```shell
 forc build
@@ -347,55 +345,48 @@ forc build
 
 ### Output
 
-A successful build will generate a new directory named `out` within the contract folder. This directory contains several key files:
+A successful build will create a new directory named `out` within the contract folder. This directory contains several important files:
 
-- **debug subdirectory:** This folder holds debugging information that can be helpful during development.
+- **debug subdirectory:** This folder contains debugging information useful during development.
 
-  - **counter-contract-abi.json:** This file stores the public Application Binary Interface (ABI) of the contract in JSON format. The ABI defines how other applications and contracts can interact with our functions and variables. Think of it as an instruction manual for external entities to communicate with our contract.
-  - **counter-contract-storage_slots.json:** This file contains details about the storage layout of our contract. It defines how data is persisted within the contract on the blockchain.
-  - **counter-contract.bin:** This is the most crucial output. It's the actual bytecode representation of the Sway code. This file contains the machine-readable instructions that the Fuel network can execute when we deploy our contract.
+    - **counter-contract-abi.json:** This file stores the contract's public Application Binary Interface (ABI) in JSON format, which describes how other applications and contracts can interact with it.
+    - **counter-contract-storage_slots.json:** This file details the storage layout of our contract, showing how data is stored on the blockchain.
+    - **counter-contract.bin:** The most important output, this file is the bytecode version of our Sway code, containing instructions that the Fuel network will execute upon deployment.
 
-## Deploying the contract
+## Deploying the Contract
 
-Now that we have built the contract, next step is to deploy the contract to the testnet. Here's a detailed breakdown of the steps involved, including wallet setup, deployment commands, and a touch on testnets:
+With the contract built, the next step is to deploy it to the testnet. Here are the steps involved, including wallet setup and deployment commands:
 
 1. **Wallet Setup:**
-
-- Before deploying, we'll need a Fuel wallet to pay for the transaction fees associated with deployment.
-- If we don't have a wallet installed, the forc deploy command will guide through the creation process. This usually involves generating a secure seed phrase that we should keep confidential.
-- Once created, the terminal will ask us to set a password for the wallet. Choose a strong and unique password to safeguard the wallet.
+    - You need a Fuel wallet to pay for transaction fees.
+    - If you don’t have a wallet, the `forc deploy` command will guide you through creating one, which includes generating a secure seed phrase to keep confidential.
+    - Set a strong, unique password for your wallet when prompted.
 
 2. **Securing Funds (for Testnet Deployment):**
-
-- We will be deploying our contract to a testnet. Testnets are special blockchain environments that mimic the functionality of a mainnet but operate with fake currency (testnet FUEL tokens).
-- Since we're deploying to a testnet (beta-5 testnet), we'll need testnet coins (FUEL tokens) to cover the deployment fees, we can use the [beta-5 faucet](https://faucet-beta-5.fuel.network/) to get some testnet coins.
+    - We are deploying to a testnet, which uses fake currency (testnet FUEL tokens).
+    - Obtain testnet coins to cover deployment fees from the [beta-5 faucet](https://faucet-beta-5.fuel.network/).
 
 3. **The Deployment Command:**
-
-- Once our wallet is set up and funded (with testnet FUEL for deployment fees), we can use the following command to deploy our contract:
-
-```shell
-forc deploy --testnet
-```
+    - With your wallet set up and funded, deploy the contract using:
+      ```shell
+      forc deploy --testnet
+      ```
 
 4. **Wallet Interaction and Confirmation:**
-
-- The terminal will prompt us for our wallet's password to unlock it and authorize the deployment transaction. Enter the password securely.
-- The terminal will then display a list of accounts associated with the wallet. Choose the account you want to use for signing the deployment transaction by entering its corresponding index number.
-- Finally, the terminal will ask for confirmation before proceeding with the deployment. Type Y (yes) when ready to deploy.
+    - Enter your wallet password when prompted to unlock it and authorize the deployment.
+    - Choose the account for signing the deployment transaction by entering its index number.
+    - Confirm the deployment by typing Y (yes) when prompted.
 
 5. **Deployment Success and Information:**
+    - Upon successful deployment, you’ll receive:
+        - Network Endpoint: The URL of the Fuel network where the contract is deployed.
+        - Contract ID: A unique identifier for your contract on the blockchain.
+        - Deployed in Block: The blockchain block number that includes your transaction.
 
-- Upon successful deployment, the terminal will display valuable information:
+**Congratulations on building your first Fuel contract!**
 
-  - Network Endpoint: This is the URL of the Fuel network we deployed to (e.g., https://beta-5.fuel.network).
-  - Contract ID: This is a unique identifier for our deployed contract on the blockchain. We'll need this ID to interact with our contract from applications or other contracts.
-  - Deployed in Block: This indicates the block number on the blockchain where our deployment transaction was included.
+You've successfully completed the writing, building, and deploying phases of your smart contract on the Fuel network.
 
-**Congratulations on Building the First Fuel Contract!**
+Ready to explore further?
 
-We've successfully navigated the process of writing, building, and deploying our first smart contract on the Fuel network!
-
-Ready to Explore Further?
-
-To delve deeper and see the complete code for this contract, check out the project repository [here](https://github.com/RobinNagpal/fuels-token-example-code)
+For the complete code of this contract, visit the project repository [here](https://github.com/RobinNagpal/fuels-token-example-code).
