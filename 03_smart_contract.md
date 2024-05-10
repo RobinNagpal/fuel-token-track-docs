@@ -14,13 +14,13 @@ We will be using `forc` to create a new smart contract.
 
 Open the terminal and run the following command:
 ```shell
-forc new token-track
+forc new TokenTrack
 ```
 
 ### Generated Project
 
 After running the `forc new` command, the following files and directories will be created in the
-`token-track` directory:
+`TokenTrack` directory:
 
 ```
 token-track
@@ -53,7 +53,7 @@ The first line in the file is:
 contract
 ```
 
-In Sway, a program must declare its type—it can be a contract, a predicate, a script, or a library. Contracts, 
+In Sway, a program must declare its type, it can be a contract, a predicate, a script, or a library. Contracts, 
 predicates, and scripts are deployable to the blockchain, while a library is for code reuse and isn't deployed directly.
 
 A Sway file begins by stating its type. A forc project can include many libraries but only one contract, script, or predicate. 
@@ -72,7 +72,7 @@ are actually written.
 
 # Token Track Contract
 
-This section guides you on how to write a contract for Token Track using the Fuel network with Sway. Here, we will 
+This section guides us on how to write a contract for Token Track using the Fuel network with Sway. Here, we will 
 create a fungible token that includes several key functionalities necessary for managing a digital currency:
 
 - **Minting**: Generate and add new tokens to the circulation.
@@ -80,9 +80,9 @@ create a fungible token that includes several key functionalities necessary for 
 - **Transferring**: Send tokens between different addresses and contracts on the Fuel network.
 - **Balance Tracking**: Record how many tokens each address or contract holds.
 
-By following this guide and using the provided Sway code, you'll gain practical experience in creating your own token contract, ready for deployment on the Fuel network!
+By following this guide and using the provided Sway code, we'll gain practical experience in creating our own token contract, ready for deployment on the Fuel network!
 
-Begin by clearing your file, keeping only the `contract` keyword, as we are drafting a contract.
+Begin by clearing the file, keeping only the `contract` keyword, as we are drafting a contract.
 
 ## Storage
 Since we are developing a token, we need storage to track the total circulation and maintain a map of account balances that hold the token.
@@ -201,7 +201,6 @@ Steps involved in the `mint_to_address` function:
 
 1. **Update Total Supply**: It reads the current total supply and adds the new tokens.
 2. **Mint and Update Balance**: It then updates the balance of the recipient, initializing it to 0 if not previously set, and adds the new tokens.
-3. **Record Updates**: Finally, it updates the storage with the new total supply and the recipient’s updated balance.
 
 This method for creating tokens is mirrored by the `mint_to_contract` function, which credits new tokens to a 
 contract on the Fuel network.

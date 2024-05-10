@@ -59,18 +59,21 @@ The UI allows to:
 **Main Folders and Files:**
 
 - `contracts`: This holds the smart contract code. We'll discuss the details in the 'Smart Contract' section.
-- `frontend`: Here you'll find the frontend code. We'll dive into the frontend in the 'Frontend' section.
+- `frontend`: Here we'll find the frontend code. We'll dive into the frontend in the 'Frontend' section.
 - `fuels.config.ts`: This file contains the configuration for the Fuels CLI.
 
 # Creating a New Project
 Lets create the directory structure for the project.
 
 ```bash
-mkdir token-track
-cd token-track
+mkdir fuel-project
+cd fuel-project
 
 mkdir contracts
 mkdir frontend
+
+cd contracts
+
 ```
 
 Now let's create the `fuels.config.ts` file in the root directory.
