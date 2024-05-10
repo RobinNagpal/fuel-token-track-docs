@@ -1,38 +1,25 @@
-# Create a Smart Contract
+# Create Smart Contract Project
+This section will guide us through creating a smart contract for the Token Track project, where we can mint, burn, and 
+track a user's token balance.
 
-This section will guide us through creating a smart contract for the Token Track project where we can mint, burn, and 
-track the balance of a token for a user.
-
-Let's dive straight into creating the project.
-
-## Creating a new project
-
-Create a new directory where we will be keeping all the code.
+Assuming you followed the steps mentioned in the previous sections, and have `contracts` and `frontend` directories in your
+project, let's start by navigating to the contracts directory.
 
 ```shell
-mkdir -p token-track-app/contracts
+cd contracts
 ```
 
-Navigate to the contracts directory.
+### Initialize a New Smart Contract
+We will be using `forc` to create a new smart contract. 
 
-```shell
-cd token-track-app/contracts
-```
-
-## Initialize a new smart contract
-
-To create a forc project, open the terminal, cd into the folder we'd like to keep our project, and run the
-following command:
-
+Open the terminal and run the following command:
 ```shell
 forc new token-track
 ```
 
-The command uses forc CLI to initialize a new project directory named `token-track`.
+### Generated Project
 
-## Generated Project
-
-After running the `forc new` command, we will see the following files and directories generated in the
+After running the `forc new` command, the following files and directories will be created in the
 `token-track` directory:
 
 ```
@@ -44,35 +31,9 @@ token-track
 
 ### `Forc.toml`
 
-`Forc.toml` (the manifest file) is a compulsory file for each package and it is written in [TOML]
-format.
-
-Forc.toml consists of the following fields:
-
-- [project] — Defines a sway project.
-
-  - name — The name of the project.
-  - authors — The authors of the project.
-  - organization — The organization of the project.
-  - license— The project license.
-  - entry — The entry point for the compiler to start parsing from.
-    For the recomended way of selecting an entry point of large libraries please take a look at: Libraries
-  - implicit-std - Controls whether provided std version (with the current forc version) will get added as a dependency implicitly. Unless you know what you are doing, leave this as default.
-  - forc-version - The minimum forc version required for this project to work properly.
-
-- [dependencies] — Defines the dependencies.
-
-- [network] — Defines a network for forc to interact with.
-
-  - url — URL of the network.
-
-- [build-profiles] - Defines the build profiles.
-
-- [patch] - Defines the patches.
-
-- [contract-dependencies] - Defines the contract dependencies.
-
-TODO: Reduce the content of the forc.toml file to only the necessary fields.
+`Forc.toml`is a mandatory manifest file for each package, written in TOML format. It includes fields such as 
+project details, dependencies, network information, build profiles, and other configurations essential for project 
+setup.
 
 ### `src/main.sw`
 
@@ -80,88 +41,74 @@ This the file where all of the contract code will go.
 
 ### Sway
 
-Notice that the src/main file has sw suffix. Sway is a programming language designed for the
-FuelVM. It is a statically typed, compiled language with type inference and traits. Sway aims to make
-smart contract development safer and more performant through the use of strong static analysis and
-compiler feedback.
+The file `src/main.sw` uses the `.sw` suffix, indicating it's written in Sway, a programming language designed for 
+the FuelVM. Sway is statically typed and compiled, with type inference and traits. It aims to enhance the safety and 
+performance of smart contract development through strong static analysis and compiler feedback.
 
-Now, let us explore the contents of main.sw.
+Let's examine the contents of `main.sw`.
 
-This first line that we'll see in the file is
+The first line in the file is:
 
 ```
 contract
 ```
 
-A Sway program itself has a type: it is either a contract, a predicate, a script, or a library. The first three of
-these things are all deployable to the blockchain. A library is simply a project designed for code reuse and
-is never directly deployed to the chain.
+In Sway, a program must declare its type—it can be a contract, a predicate, a script, or a library. Contracts, 
+predicates, and scripts are deployable to the blockchain, while a library is for code reuse and isn't deployed directly.
 
-Every Sway file must begin with a declaration of what type of program it is. A project can have many
-libraries within it, but only one contract, script, or predicate. Contracts are used primarily for
-protocols or systems that operate within a fixed set of rules
+A Sway file begins by stating its type. A forc project can include many libraries but only one contract, script, or predicate. 
+Contracts are typically used for protocols or systems that adhere to a set of rules.
 
-The next thing we see in the `main.sw` file is an ABI.
+The next element in `main.sw` is an ABI.
 
 ### ABI
 
-An ABI defines an interface, and there is no function body in the ABI. A contract must either define or import an
-ABI declaration and implement it. It is considered best practice to define the ABI in a separate library and import
-it into our contract because this allows callers of the contract to import and use the ABI in scripts to call
-our contract.
+An ABI (Application Binary Interface) outlines an interface without including function bodies. A contract must define 
+or import an ABI declaration and implement it. It is best practice to define the ABI in a separate library and import 
+it into the contract. This allows others to import and use the ABI in their scripts to interact with the contract.
 
-The next and the last thing in the `main.sw` file is the implementation of the ABI. This is where we write the
-implementation of the functions defined in our ABI.
+Following the ABI in the `main.sw` file is the implementation of the ABI, where the functions defined in the ABI 
+are actually written.
 
 # Token Track Contract
 
-Now that we have covered the basics of a contract, let's start with writing our own contract for Token Track.
+This section guides you on how to write a contract for Token Track using the Fuel network with Sway. Here, we will 
+create a fungible token that includes several key functionalities necessary for managing a digital currency:
 
-So we will be creating our own fungible token on the Fuel network using Sway. The token we'll create will possess
-key functionalities essential for managing a digital currency:
+- **Minting**: Generate and add new tokens to the circulation.
+- **Burning**: Remove tokens from circulation permanently.
+- **Transferring**: Send tokens between different addresses and contracts on the Fuel network.
+- **Balance Tracking**: Record how many tokens each address or contract holds.
 
-- **Minting**: Generate new tokens and inject them into circulation.
-- **Burning**: Remove existing tokens from circulation, effectively taking them out of the game.
-- **Transferring**: Send tokens between different Address and Contracts on the Fuel network.
-- **Balance Tracking**: Keep a record of how many tokens each address or contract holds.
+By following this guide and using the provided Sway code, you'll gain practical experience in creating your own token contract, ready for deployment on the Fuel network!
 
-By following this guide and leveraging the provided Sway code, we'll gain hands-on experience crafting our very own
-token contract, ready to be deployed on the Fuel network!
-
-Start by removing everything from the file except the the `contract` keyword since we are writing a contract so
-that won't change.
+Begin by clearing your file, keeping only the `contract` keyword, as we are drafting a contract.
 
 ## Storage
-Since, we are creating a token, we will need some sort of storage in order to track the total circulation of the
-token as well as a map to keep track of the accounts which hold this token.
+Since we are developing a token, we need storage to track the total circulation and maintain a map of account balances that hold the token.
 
-Declare a storage block with the following lines of code:
+Define a storage block with the following lines of code:
 
 ```rust
 // Define storage variables for the contract
 storage {
-    // `balances` is a StorageMap that maps identities to their u64 balances
+    // `balances` is a StorageMap mapping identities to their u64 balances
     balances: StorageMap<Identity, u64> = StorageMap::<Identity, u64> {},
     // `total_supply` stores the total number of tokens in circulation
     total_supply: u64 = 0,
 }
 ```
 
-When developing a smart contract, we will typically need some sort of persistent storage. In this case, persistent
-storage, often just called storage in this context, is a place where we can store values that are persisted inside
-the contract itself. This is in contrast to a regular value in memory, which disappears after the contract exits.
+In smart contract development, persistent storage is crucial. It stores values within the contract itself, unlike 
+temporary memory values which disappear after the contract finishes executing. Here, we define two storage variables:
 
-Here, we are defining two variables in the storage:
+1. `balances`: A Storage Map that links identities to their balances.
+2. `total_supply`: An integer that records the total number of tokens in circulation.
 
-1. `balances` which is a Storage Map. It maps identities to their balances.
-2. `total_supply` which is simply an integer which stores the total number of tokens in circulation.
+Let's clarify some terms:
 
-There are a few terms which might be confusing. Let's go over them one by one:
-
-- **Identity**: The Identity type is an enum that allows for the handling of both Address and ContractId types. This is 
-useful in cases where either type is accepted, e.g. receiving funds from an identified sender, but not caring if 
-the sender is an address or a contract.
-  An Identity is implemented as follows.
+- **Identity**: An enum type that handles both `Address` and `ContractId` types, useful for identifying senders without 
+ specifying if they are addresses or contracts. Here is how it's implemented:
 
   ```rust
   pub enum Identity {
@@ -169,13 +116,17 @@ the sender is an address or a contract.
       ContractId: ContractId,
   }
   ```
-- **Storage Maps**: Generic storage maps are available in the standard library as StorageMap<K, V> which have to be 
-defined inside a storage block and allows us to call insert() and get() to insert values at specific keys and get those 
-values respectively. Refer to Storage Maps for more information about StorageMap<K, V>.
-- **u64**: u64 is one of the primitive types in Sway. It is 64-bit unsigned integer.
+
+- **Storage Maps**: These are generic storage maps (StorageMap<K, V>) used for storing key-value pairs. They allow 
+  functions like `insert()` and `get()` to manage values based on keys.
+
+- **u64**: A primitive data type in Sway, representing a 64-bit unsigned integer.
+
 
 ## ABI
-Next, we'll define the ABI for our project, we will go over the details of each of these function when we implement them
+Next, we will define the ABI (Application Binary Interface) for our project. We will discuss the details of 
+each function when we implement them.
+
 
 ```rust
 // Define the contract's ABI (Application Binary Interface)
@@ -196,7 +147,7 @@ abi MyContract {
     #[storage(read, write)]
     fn burn_from_contract(target: ContractId, amount: u64);
 
-    // Function to transfer tokens between two identities
+    // Function to transfer tokens between two addresses
     #[storage(read, write)]
     fn transfer_coins_to_address(coins: u64, from: Address, target: Address);
 
@@ -204,18 +155,16 @@ abi MyContract {
     #[storage(read, write)]
     fn transfer_coins_to_contract(coins: u64, from: ContractId, target: ContractId);
 
+    // Function to get the balance of an identity
     #[storage(read)]
     fn get_balance(addr: Identity) -> u64;
 }
 ```
 
-In Sway, functions are pure (does not access any persistent storage) by default but can be opted into impurity via the 
-storage function attribute. The storage attribute may take read and/or write arguments indicating which type of access 
-the function requires.
+In Sway, functions are by default pure, meaning they do not access any persistent storage. However, they can be modified to access storage by using the `storage` function attribute. This attribute can take `read` and/or `write` arguments to specify the required type of access:
 
-The #[storage(read)] attribute indicates that a function requires read access to the storage.
-
-The #[storage(write)] attribute indicates that a function requires write access to the storage.
+- The `#[storage(read)]` attribute indicates that a function needs read access to the storage.
+- The `#[storage(write)]` attribute indicates that a function needs write access to the storage.
 
 ## Contract Code - Implementation of ABI
 
