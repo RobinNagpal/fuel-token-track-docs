@@ -289,3 +289,45 @@ Some of the most used commands provided by forc are:
 - `forc new` -  Create a new Forc project at <path>.
 - `forc build` - Compile the current or target project. The output produced will depend on the project's program type.
 - `forc-test` - Run the Sway unit tests for the current project.
+
+
+---- 
+
+# FrontEnd
+
+## ToDo
+
+- A brief overview of the tools and technologies we will be using for the front-end.
+  - Fuel browser wallet
+  - fuels SDK
+  - Typings
+  - React
+- Mention the versions of the tools which are being used in the quickstart guide to avoid any incompatibility.
+- Instructions to set up the required frontend library
+- Explanation about the fuels sdk and why is it required, also explain the modifications in the index.tsx file, the providers and other changes
+- Instructions to generate contract types for type safety. There should be an explanation of the output files, what content do they contain.
+  - fuels-config.ts
+  - sway-api folder
+- A step-by-step guide to explaining the frontend code.
+
+### Installing the Browser Wallet
+
+- A guide explaining the installation of wallet extension in the browser.
+- Instructions telling about transferring test coins using the faucet.
+
+### UI Functionality
+
+### Walk Through of UI
+
+- Walk the user through different functionalities of the application like minting, burning and transferring of the tokens.
+
+---
+
+Now that we have a contract built and deployed to the Fuel testnet, we now need a UI to interact with that contract. Fuel provide a typescript SDK to interact with the Fuel Blockchain. So we will be creating a frontend with the following tools:
+
+1. React (v18.3.1): A JavaScript library for building user interfaces.
+2. fuels (v0.84.0): A TypeScript SDK that simplifies interacting with Fuel contracts from the browser.
+3. Fuel Browser
+
+Important: While using these specific versions is recommended for this guide, always double-check compatibility when working on your own projects. Refer to the official documentation for the latest supported versions.
+

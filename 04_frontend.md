@@ -1,80 +1,34 @@
-# FrontEnd
-
-## ToDo
-
-- A brief overview of the tools and technologies we will be using for the front-end.
-  - Fuel browser wallet
-  - fuels SDK
-  - Typings
-  - React
-- Mention the versions of the tools which are being used in the quickstart guide to avoid any incompatibility.
-- Instructions to set up the required frontend library
-- Explanation about the fuels sdk and why is it required, also explain the modifications in the index.tsx file, the providers and other changes
-- Instructions to generate contract types for type safety. There should be an explanation of the output files, what content do they contain.
-  - fuels-config.ts
-  - sway-api folder
-- A step-by-step guide to explaining the frontend code.
-
-### Installing the Browser Wallet
-
-- A guide explaining the installation of wallet extension in the browser.
-- Instructions telling about transferring test coins using the faucet.
-
-### UI Functionality
-
-### Walk Through of UI
-
-- Walk the user through different functionalities of the application like minting, burning and transferring of the tokens.
-
----
-
-Now that we have a contract built and deployed to the Fuel testnet, we now need a UI to interact with that contract. Fuel provide a typescript SDK to interact with the Fuel Blockchain. So we will be creating a frontend with the following tools:
-
-1. React (v18.3.1): A JavaScript library for building user interfaces.
-2. fuels (v0.84.0): A TypeScript SDK that simplifies interacting with Fuel contracts from the browser.
-3. Fuel Browser
-
-Important: While using these specific versions is recommended for this guide, always double-check compatibility when working on your own projects. Refer to the official documentation for the latest supported versions.
-
 # Initializing the React App
 
-We'll start by initializing the React application. Assuming we are currently at `contracts/TokenTrack`, go back up two directories:
+Let's begin by setting up the React application. First, navigate back to the main directory from `contracts/TokenTrack`:
 
-```
+```shell
 cd ../..
 ```
 
-Now create a new React project
+Now, create a new React project:
 
-```
-npx create-react-app frontend  --template typescript
+```shell
+npx create-react-app frontend --template typescript
 cd frontend
 ```
 
-Next up, we'll install the fuels SDK
+Next, install the fuels SDK:
 
-```
+```shell
 npm install fuels@0.84.0 @fuels/react@0.18.0 @fuels/connectors@0.2.2 @tanstack/react-query@5.28.9
 ```
 
-# Generating contract types
+# Generating Contract Types
+We have already added the configuration for fuels in the `fuels.config.ts` file. To generate the contract types, run the following command:
 
-The fuels init command generates a `fuels.config.ts` file that is used by the SDK to generate contract types. Use the contracts flag to define where the contract folder is located, and the output flag to define where we want the generated files to be created.
-
-```
-npx fuels@0.84.0 init --contracts ../contracts/TokenTrack/ --output ./src/sway-contracts-api
-```
-
-Now that we have a fuels.config.ts file, we can use the fuels build command to rebuild our contract and generate types. Running this command will interpret the output ABI JSON from our contract and generate the correct TypeScript definitions.
-
-Inside the `/frontend` directory run:
-
-```
+```shell
 npx fuels@0.84.0 build
 ```
 
-This will create a folder named `sway-contract-api` which the following files and folders:
+This command generates the contract types in the path specified in the `fuels.config.ts` file, which for us will be `frontend/src/sway-api`.
 
+The generated files include:
 ```
 .
 ├── contracts
@@ -87,56 +41,42 @@ This will create a folder named `sway-contract-api` which the following files an
 └── index.ts
 ```
 
-Among these generated files, there are two important classes:
+## 1. `TokenTrackAbi`
 
-## 1. TokenTrackAbi
+The `TokenTrackAbi` class acts as a typed interface designed to interact with our TokenTrackAbi smart contract. It 
+provides details about each function in our smart contract, including:
 
-The TokenTrackAbi class serves as a typed interface specifically designed to interact with our TokenTrackAbi smart contract.
-The functions property within the class is the heart of this typed interface. It defines each function available in our smart contract, along with the data it expects:
+- Function Names: These serve as identifiers that correspond to the actual names in our contract, such as `burn_from_address`, `mint_to_address`.
+- Function Arguments: Each function lists its required arguments with specific types like `AddressInput` or `BigNumberish` to ensure data compatibility.
+- Return Types: This indicates the type of data a function may return, such as void for no return value or BN for returning a large number.
 
-- Function Names: These act as labels, mirroring the actual function names in our contract (e.g., burn_from_address, mint_to_address).
-- Function Arguments: Each function has an array listing its arguments. These arguments come with specific types (like AddressInput, BigNumberish). These types ensure we provide data that matches what the contract expects.
-- Return Types: Similar to arguments, functions can return values. The return type specifies what kind of data the function call might return (e.g., void for functions that don't return anything, BN for functions returning a big number).
+#### Benefits of Typed Interface
 
-### Benefits of typed interface
+- **Code Clarity:** The typed interface simplifies understanding of what data each function requires and its potential return type.
+- **Error Prevention:** The type system helps identify and prevent errors by ensuring data compatibility before runtime, saving time and reducing frustrations.
 
-- Code Clarity: By using this typed interface, our code becomes much easier to understand. We can see at a glance what data each function requires and what it might return.
-- Error Prevention: The type system helps catch errors early on. If we try to use incompatible data, the development tools might warn us before we even run the code. This saves time and frustration!
+## 2. `TokenTrackAbi__factory`
 
-## 2. TokenTrackAbi\_\_factory
+The `TokenTrackAbi__factory` class manages interactions with the `TokenTrackAbi` smart contract on the Fuel network. It includes:
 
-TokenTrackAbi**factory class deals with interacting with our TokenTrackAbi smart contract on the Fuel network. Following we explain some of the key components of the TokenTrackAbi**factory class:
+#### ABI and Storage Slots:
 
-### ABI and Storage Slots:
+- `static readonly abi = _abi` : This line holds the ABI of our smart contract, detailing the functions and variables it exposes.
+- `static readonly storageSlots = _storageSlots` : This array contains the storage layout of our smart contract.
 
-- **static readonly abi = \_abi:**  
-  This line stores the compiled ABI (Application Binary Interface) of our smart contract. The ABI defines the functions and variables exposed by our contract, allowing our frontend code to interact with them.
+#### Interface Creation (createInterface):
 
-- **static readonly storageSlots = \_storageSlots:**  
-  This line holds an array representing the storage layout of our smart contract. This information is used for interacting with the contract's storage variables.
+`static createInterface(): TokenTrackAbiInterface`: This method generates a TypeScript interface that reflects our contract's structure, enhancing type safety and enabling code completion.
 
-### Interface Creation (createInterface):
+#### Contract Connection (connect):
 
-- **static createInterface(): TokenTrackAbiInterface:**  
-  This method utilizes the stored ABI to generate a TypeScript interface named TokenTrackAbiInterface. This interface reflects the structure of our contract, providing type safety and code completion for interacting with our contract's functions in our frontend code.
+`static connect(id: string | AbstractAddress, accountOrProvider: Account | Provider): TokenTrackAbi:`: This function connects our frontend code to a deployed TokenTrackAbi contract on the Fuel network.
 
-### Contract Connection (connect):
+#### Contract Deployment (deployContract):
 
-- **static connect(id: string | AbstractAddress, accountOrProvider: Account | Provider): TokenTrackAbi:**  
-  This method allows us to connect our frontend code to a deployed instance of our TokenTrackAbi contract on the Fuel network.
+`static async deployContract(bytecode: BytesLike, wallet: Account, options: DeployContractOptions = {}): Promise<TokenTrackAbi>`: This method deploys a new instance of our contract. It takes the contract's bytecode, ABI, wallet details, and the storageSlots, ensuring correct storage layout. The method returns a promise resolving to a TokenTrackAbi object for the newly deployed instance.
 
-### Contract Deployment (deployContract):
 
-- **static async deployContract(bytecode: BytesLike, wallet: Account, options: DeployContractOptions = {}): Promise<TokenTrackAbi>:**  
-  This asynchronous method is where the deployment functionality comes in. It allows us to deploy a new instance of our TokenTrackAbi contract:
-
-  - bytecode: This argument holds the raw bytecode of our smart contract, compiled for deployment on the Fuel network.
-  - wallet: This refers to the Fuel account or wallet we want to use for deploying the contract (with sufficient funds for gas costs).
-  - options: This optional object let us specify additional deployment parameters like gas price or gas limit.
-
-The method uses a ContractFactory object to handle the deployment process. It provides the contract's bytecode, ABI, wallet information, and the storageSlots to ensure proper storage layout for the new contract.
-
-Finally, it deploys the contract and returns a promise that resolves to a TokenTrackAbi object representing the newly deployed instance.
 
 # Connecting Our Frontend to Fuel: Setting Up the Environment
 
@@ -146,7 +86,7 @@ Now that we have a basic React application structure, let's integrate the necess
 
 At the beginning of the frontend/src/index.tsx file, we'll need to import the following modules:
 
-```
+```typescript
 import { FuelProvider } from '@fuels/react';
 import {
   FuelWalletConnector,
@@ -163,7 +103,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 2. Creating a Query Client:
    Create a new instance of the QueryClient class:
 
-```
+```typescript
 const queryClient = new QueryClient();
 ```
 
@@ -172,7 +112,7 @@ This query client will assist with managing data fetching related to our smart c
 3. Wrapping the App with Providers:
    Next, modify the structure of the index.tsx file to wrap the main application component (App) with the FuelProvider and QueryClientProvider components. Here's the updated structure:
 
-```
+```typescript jsx
 <QueryClientProvider client={queryClient}>
   <FuelProvider
     fuelConfig={{
@@ -197,7 +137,7 @@ Next up, we'll define the code and functions to interact with the contract.
 
 Let's establish a connection between the React application and our deployed smart contract. This connection will allow the application to call our contract's functions and retrieve data from the blockchain. The following code snippet demonstrates how we achieve this connection using the `useEffect` hook:
 
-```
+```typescript
   useEffect(() => {
     async function connectContract() {
       if (isConnected && wallet) {
@@ -219,7 +159,7 @@ Now to call the `mint_to_address` function in our contract, we have handleMintTo
 
 1. Contract Check
 
-```
+```typescript
 if (!contract) {
     return alert("Contract not loaded");
 }
@@ -229,7 +169,7 @@ if (!contract) {
 
 2. Extracting Mint Address
 
-```
+```typescript
 const address = Address.fromString(mintTo);
 const addressInput = { value: address.toB256() };
 ```
@@ -240,7 +180,7 @@ const addressInput = { value: address.toB256() };
 
 3. Calling the Contract Function:
 
-```
+```typescript
 await contract.functions
     .mint_to_address(addressInput, Number(mintAmount))
     .txParams({
@@ -261,7 +201,7 @@ await contract.functions
 
 4. Error Handling:
 
-```
+```typescript
 catch (error) {
     console.error(error);
 }
@@ -271,7 +211,7 @@ catch (error) {
 
 5. Resetting Input Values:
 
-```
+```typescript
 setMintTo("");
 setMintAmount("");
 ```
