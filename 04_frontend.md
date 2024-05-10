@@ -237,29 +237,29 @@ The form has three sections: Minting, Transferring, and Burning. Each section is
 ```typescript jsx
 <div className="form-field">
   <input
-          type="text"
-          value={mintTo}
-          onChange={(e) => setMintTo(e.target.value)}
-          placeholder="Address to mint"
+      type="text"
+      value={mintTo}
+      onChange={(e) => setMintTo(e.target.value)}
+      placeholder="Address to mint"
   />
   <input
-          type="number"
-          value={mintAmount}
-          onChange={(e) => setMintAmount(e.target.value)}
-          placeholder="Amount to mint"
+      type="number"
+      value={mintAmount}
+      onChange={(e) => setMintAmount(e.target.value)}
+      placeholder="Amount to mint"
   />
   <select
-          value={mintType}
-          onChange={(e) => setMintType(e.target.value)}
-          style={{marginRight: "10px"}}
+      value={mintType}
+      onChange={(e) => setMintType(e.target.value)}
+      style={{marginRight: "10px"}}
   >
     <option value="Address">Address</option>
     <option value="Contract">Contract</option>
   </select>
   <button
-          onClick={
-            mintType === "Address" ? handleMintToAddress : handleMintToContract
-          }
+      onClick={
+        mintType === "Address" ? handleMintToAddress : handleMintToContract
+      }
   >
     Mint New Tokens
   </button>
@@ -281,31 +281,31 @@ Here is how the UI would look like
 ```typescript jsx
 <div className="form-field">
   <input
-          type="text"
-          value={transferTo}
-          onChange={(e) => setTransferTo(e.target.value)}
-          placeholder="Address to transfer to"
+      type="text"
+      value={transferTo}
+      onChange={(e) => setTransferTo(e.target.value)}
+      placeholder="Address to transfer to"
   />
   <input
-          type="number"
-          value={transferAmount}
-          onChange={(e) => setTransferAmount(e.target.value)}
-          placeholder="Amount to transfer"
+      type="number"
+      value={transferAmount}
+      onChange={(e) => setTransferAmount(e.target.value)}
+      placeholder="Amount to transfer"
   />
   <select
-          value={mintType}
-          onChange={(e) => setTransferType(e.target.value)}
-          style={{marginRight: "10px"}}
+      value={mintType}
+      onChange={(e) => setTransferType(e.target.value)}
+      style={{marginRight: "10px"}}
   >
     <option value="Address">Address</option>
     <option value="Contract">Contract</option>
   </select>
   <button
-          onClick={
-            transferType === "Address"
-                    ? handleTransferToAddress
-                    : handleTransferToContract
-          }
+      onClick={
+        transferType === "Address"
+                ? handleTransferToAddress
+                : handleTransferToContract
+      }
   >
     Transfer Tokens
   </button>
@@ -326,10 +326,10 @@ Here is how the Transfer UI would look like
 ```typescript jsx
 <div className="form-field">
   <input
-          type="number"
-          value={burnAmount}
-          onChange={(e) => setBurnAmount(e.target.value)}
-          placeholder="Amount to burn"
+      type="number"
+      value={burnAmount}
+      onChange={(e) => setBurnAmount(e.target.value)}
+      placeholder="Amount to burn"
   />
   <button onClick={handleBurn}>Burn Tokens</button>
 </div>
