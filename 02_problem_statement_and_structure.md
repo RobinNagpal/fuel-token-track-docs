@@ -5,7 +5,7 @@ mint, burn, and track a user's token balance. We'll also create a frontend to in
 
 #### Here is how the UI will look like:
 
-![User Interface](https://raw.githubusercontent.com/RobinNagpal/fuels-token-example/main/assets/images/ui.png)
+![User Interface](https://raw.githubusercontent.com/RobinNagpal/fuel-token-track-docs/main/assets/images/ui.png)
 
 The UI allows to:
 

@@ -14,7 +14,7 @@ below shows the components of a typical DApp and how they interact with each oth
 | **Fuel Chain**       | This is the blockchain network where the smart contracts are deployed. Fuel provides the environment that allows the smart contracts to run securely and transparently.                     | [fuel-core](https://github.com/FuelLabs/fuel-core) is the Fuel client implementation.                                                                                                                                                                                    |
 | **Indexer**          | A tool that reads data from the blockchain and organizes it in a way that makes it easier and faster for the DApp to query and retrieve information.                                        | [fuel-indexer](https://github.com/FuelLabs/fuel-indexer/) is a standalone service that can be used to index various components of the blockchain.                                                                                                                        |
 
-![Fuel Dapp](https://raw.githubusercontent.com/RobinNagpal/fuels-token-example/main/assets/images/fuel_dapp.png)
+![Fuel Dapp](https://raw.githubusercontent.com/RobinNagpal/fuel-token-track-docs/main/assets/images/Architecture.png)
 
 #### Flow of a typical transaction in this DApp might look like this:
 

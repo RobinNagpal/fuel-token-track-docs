@@ -46,9 +46,9 @@ The generated files include:
 The `TokenTrackAbi` class acts as a typed interface designed to interact with our TokenTrackAbi smart contract. It 
 provides details about each function in our smart contract, including:
 
-- Function Names: These serve as identifiers that correspond to the actual names in our contract, such as `burn_from_address`, `mint_to_address`.
-- Function Arguments: Each function lists its required arguments with specific types like `AddressInput` or `BigNumberish` to ensure data compatibility.
-- Return Types: This indicates the type of data a function may return, such as void for no return value or BN for returning a large number.
+- **Function Names**: These serve as identifiers that correspond to the actual names in our contract, such as `burn_from_address`, `mint_to_address`.
+- **Function Arguments**: Each function lists its required arguments with specific types like `AddressInput` or `BigNumberish` to ensure data compatibility.
+- **Return Types**: This indicates the type of data a function may return, such as void for no return value or BN for returning a large number.
 
 #### Benefits of Typed Interface
 
