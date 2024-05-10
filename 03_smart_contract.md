@@ -330,7 +330,7 @@ A successful build will create a new directory named `out` within the contract f
   - **TokenTrack-contract-storage_slots.json:** This file details the storage layout of our contract, showing how data is stored on the blockchain.
   - **TokenTrack-contract.bin:** The most important output, this file is the bytecode version of our Sway code, containing instructions that the Fuel network will execute upon deployment.
 
-## Deploying the Contract
+## Deploying the Contract (Testnet)
 
 With the contract built, the next step is to deploy it to the testnet. Here are the steps involved, including wallet setup and deployment commands:
 
@@ -364,7 +364,32 @@ With the contract built, the next step is to deploy it to the testnet. Here are 
      - Contract ID: A unique identifier for your contract on the blockchain.
      - Deployed in Block: The blockchain block number that includes your transaction.
 
-We have now seen how to deploy to the testnet, let us also see how we can deploy to a local node
+## Deploying the Contract (Local Node)
+
+We have now seen how to deploy to the testnet, let us also see how we can deploy the contract to a local node.
+
+There are two types of Fuel networks that can be run:
+
+1. In-memory network (without persistence)
+2. Local network with persistence
+
+For this example, we will be using an In-memory network.
+
+An in-memory node does not persist the blockchain state anywhere, it is only stored in memory as long as the node is active and running.
+
+To spin-up a local in-memory Fuel node, run the following command:
+
+```bash
+fuel-core run --db-type in-memory --debug
+```
+
+Once the node is up and running, make sure we are in the `contracts/TokenTrack`, we can deploy our contract using the following command:
+
+```bash
+forc deploy --unsigned --node-url 127.0.0.1:4000/graphql
+```
+
+This will deploy the contract to the local node.
 
 **Congratulations on building your first Fuel contract!**
 
