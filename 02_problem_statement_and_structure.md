@@ -1,6 +1,6 @@
 # Token Track Project
 
-One of the most common uses for smart contracts is creating a token. In this example, we'll make a contract that can 
+One of the most common uses for smart contracts is creating a token. In this example, we'll make a contract that can
 mint, burn, and track a user's token balance. We'll also create a frontend to interact with the contract.
 
 #### Here is how the UI will look like:
@@ -59,51 +59,57 @@ The UI allows to:
 **Main Folders and Files:**
 
 - `contracts`: This holds the smart contract code. We'll discuss the details in the 'Smart Contract' section.
-- `frontend`: Here you'll find the frontend code. We'll dive into the frontend in the 'Frontend' section.
+- `frontend`: Here we'll find the frontend code. We'll dive into the frontend in the 'Frontend' section.
 - `fuels.config.ts`: This file contains the configuration for the Fuels CLI.
 
 # Creating a New Project
+
 Lets create the directory structure for the project.
 
 ```bash
-mkdir token-track
-cd token-track
+mkdir fuel-project
+cd fuel-project
 
 mkdir contracts
 mkdir frontend
+
 ```
 
 Now let's create the `fuels.config.ts` file in the root directory.
 
 ```bash
-npx fuels@0.84.0 init --contracts ./contracts/TokenTrack --output ./frontend/src/sway-api 
-``` 
+npx fuels@0.84.0 init --contracts ./contracts/TokenTrack/ --output ./frontend/src/sway-contracts-api
+npm install fuels@0.84.0
+```
 
 This will create a `fuels.config.ts` file with the following content:
 
 ```typescript
-import { createConfig } from 'fuels';
+import { createConfig } from "fuels";
 
 export default createConfig({
-  contracts: ['./contracts/TokenTrack'],
-  output: './frontend/src/sway-api',
+  contracts: ["./contracts/TokenTrack"],
+  output: "./frontend/src/sway-api",
 });
 ```
 
 `Fuels CLI` has many commands that can be used to build, deploy, and interact with smart contracts. We'll discuss these
 
 # Fuels CLI
-In this project, we'll use the Fuels CLI to construct and deploy our contracts. The Fuels CLI is a command-line tool 
-that assists in building, deploying, and interacting with smart contracts. It's built on top of the `forc` command-line 
+
+In this project, we'll use the Fuels CLI to construct and deploy our contracts. The Fuels CLI is a command-line tool
+that assists in building, deploying, and interacting with smart contracts. It's built on top of the `forc` command-line
 tool. Configuration for the Fuels CLI is done through a `fuels.config.ts` file.
 
 #### fuels.config.ts
 
 In our case, we've specified the `contracts` and `output` fields:
+
 - The `contracts` field specifies the path to the contract directories.
 - The `output` field specifies where the generated files will be saved.
 
 The `fuels.config.ts` configuration consists of following fields:
+
 ```
 workspace?: string;
 contracts?: string[];
@@ -116,21 +122,24 @@ autoStartFuelCore?: boolean;
 ```
 
 The workspace field specifies the path to the workspace directory. In our case, we have are not using the workspace
-and have specified the contracts field. 
+and have specified the contracts field.
 
 For other properties in this file you can visit [here](https://docs.fuel.network/docs/nightly/fuels-ts/fuels-cli/config-file/)
+
 ## Workspace
 
-Note: We'll briefly discuss the concept of a workspace here, as it's not used in this example. For more details, you 
+Note: We'll briefly discuss the concept of a workspace here, as it's not used in this example. For more details, you
 can refer to [this](https://docs.fuel.network/docs/forc/workspaces/#workspaces)
 
 A workspace is a group of one or more packages, called workspace members, that are managed together.
 
 Workspace manifests are declared within `Forc.toml` files and appear like this:
+
 ```toml
 [workspace]
 members = ["TokenTrack"]
-``` 
+```
+
 We can use `forc` commands like `forc build`, `forc deploy`, etc. in the workspace directory to build and deploy all the
 members in the workspace.
 
@@ -181,6 +190,7 @@ npx fuels@0.84.0 dev
 ```
 
 The `fuels dev` command does three things:
+
 1. Automatically starts a short-lived fuel-core node.
 2. Runs build and deploy once at the start.
 3. If autoStartFuelCore is enabled, it watches your Forc workspace and repeats the previous steps on every change.

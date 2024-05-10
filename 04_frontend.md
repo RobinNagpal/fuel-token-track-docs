@@ -20,15 +20,18 @@ npm install fuels@0.84.0 @fuels/react@0.18.0 @fuels/connectors@0.2.2 @tanstack/r
 ```
 
 # Generating Contract Types
+
 We have already added the configuration for fuels in the `fuels.config.ts` file. To generate the contract types, run the following command:
 
 ```shell
+cd ..
 npx fuels@0.84.0 build
 ```
 
 This command generates the contract types in the path specified in the `fuels.config.ts` file, which for us will be `frontend/src/sway-api`.
 
 The generated files include:
+
 ```
 .
 ├── contracts
@@ -43,7 +46,7 @@ The generated files include:
 
 ## 1. `TokenTrackAbi`
 
-The `TokenTrackAbi` class acts as a typed interface designed to interact with our TokenTrackAbi smart contract. It 
+The `TokenTrackAbi` class acts as a typed interface designed to interact with our TokenTrackAbi smart contract. It
 provides details about each function in our smart contract, including:
 
 - **Function Names**: These serve as identifiers that correspond to the actual names in our contract, such as `burn_from_address`, `mint_to_address`.
@@ -76,7 +79,6 @@ The `TokenTrackAbi__factory` class manages interactions with the `TokenTrackAbi`
 
 `static async deployContract(bytecode: BytesLike, wallet: Account, options: DeployContractOptions = {}): Promise<TokenTrackAbi>`: This method deploys a new instance of our contract. It takes the contract's bytecode, ABI, wallet details, and the storageSlots, ensuring correct storage layout. The method returns a promise resolving to a TokenTrackAbi object for the newly deployed instance.
 
-
 # Connecting Our Frontend to Fuel: Setting Up the Environment
 
 Now that we have a basic React application structure, let's integrate the necessary components to interact with our Fuel smart contract. This section will focus on setting up the environment within our index.tsx file.
@@ -86,13 +88,13 @@ Now that we have a basic React application structure, let's integrate the necess
 At the beginning of the frontend/src/index.tsx file, we need to import the following modules:
 
 ```typescript
-import { FuelProvider } from '@fuels/react';
+import { FuelProvider } from "@fuels/react";
 import {
   FuelWalletConnector,
   FuelWalletDevelopmentConnector,
   FueletWalletConnector,
-} from '@fuels/connectors';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+} from "@fuels/connectors";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 ```
 
 - `FuelProvider`: This component from @fuels/react wraps our entire application and provides the context for interacting with the Fuel network.
@@ -131,24 +133,21 @@ This query client will help manage data fetching related to our smart contract i
 
 - `QueryClientProvider`: This component wraps the entire application and provides the queryClient context for data fetching.
 - `FuelProvider`: This component wraps our App component and sets up the context for connecting to the Fuel network. Inside the `FuelProvider`, we define a configuration object (fuelConfig) that outlines how our application will connect to the network and interact with wallets.
-    - The `connectors` property is an array containing instances of different wallet connector classes. These connectors enable users to connect their Fuel wallets to the application.
+  - The `connectors` property is an array containing instances of different wallet connector classes. These connectors enable users to connect their Fuel wallets to the application.
 
 Next, let's establish a connection between the React application and our deployed smart contract. This connection will allow the application to call our contract's functions and retrieve data from the blockchain. The following code snippet demonstrates how we achieve this connection using the `useEffect` hook:
 
 ```typescript
-  useEffect(() => {
-    async function connectContract() {
-      if (isConnected && wallet) {
-        const TokenContract = TokenTrackAbi__factory.connect(
-          CONTRACT_ID,
-          wallet
-        );
-        setContract(TokenContract);
-      }
+useEffect(() => {
+  async function connectContract() {
+    if (isConnected && wallet) {
+      const TokenContract = TokenTrackAbi__factory.connect(CONTRACT_ID, wallet);
+      setContract(TokenContract);
     }
+  }
 
-    connectContract();
-  }, [isConnected, wallet]);
+  connectContract();
+}, [isConnected, wallet]);
 ```
 
 To call the `mint_to_address` function in our contract, we have the handleMintToAddress function, which serves as the
@@ -160,7 +159,7 @@ bridge between our user interface and the `mint_to_address` function defined in 
 
 ```typescript
 if (!contract) {
-    return alert("Contract not loaded");
+  return alert("Contract not loaded");
 }
 ```
 
@@ -181,21 +180,21 @@ const addressInput = { value: address.toB256() };
 
 ```typescript
 await contract.functions
-    .mint_to_address(addressInput, Number(mintAmount))
-    .txParams({
-        gasPrice: 1,
-        gasLimit: 1_000_000,
-    })
-    .call();
+  .mint_to_address(addressInput, Number(mintAmount))
+  .txParams({
+    gasPrice: 1,
+    gasLimit: 1_000_000,
+  })
+  .call();
 ```
 
 - The main action occurs here. It uses the contract object to call the `mint_to_address` function from our smart contract.
 - It sets up arguments for the function call:
-    - `addressInput`: The address object containing the converted mint address.
-    - `Number(mintAmount)`: The mint amount provided by the user, converted to a number.
+  - `addressInput`: The address object containing the converted mint address.
+  - `Number(mintAmount)`: The mint amount provided by the user, converted to a number.
 - It also sets transaction parameters:
-    - `gasPrice`: A fixed gas price.
-    - `gasLimit`: The maximum gas allowed for this transaction.
+  - `gasPrice`: A fixed gas price.
+  - `gasLimit`: The maximum gas allowed for this transaction.
 - The `.call()` method executes the transaction, sending the mint request to the Fuel network.
 
 4. **Error Handling:**
@@ -227,26 +226,118 @@ This section discusses the user interface (UI) components that enable users to i
 
 The form has three sections: Minting, Transferring, and Burning. Each section is designed for specific token interactions:
 
-#### Minting Section:
+#### Minting Token:
 
 - Users can mint new tokens to a specified address.
 - The `mintTo` input field is where users enter the recipient's address.
 - The `mintAmount` field allows users to specify the number of tokens they wish to mint.
+- The `mintType` dropdown field allows users to specify if they want to mint to an Address or a Contract.
 - The "Mint New Tokens" button activates the `handleMintToAddress` function to start the minting process.
 
-#### Transferring Section:
+```typescript
+<div className="form-field">
+  <input
+    type="text"
+    value={mintTo}
+    onChange={(e) => setMintTo(e.target.value)}
+    placeholder="Address to mint"
+  />
+  <input
+    type="number"
+    value={mintAmount}
+    onChange={(e) => setMintAmount(e.target.value)}
+    placeholder="Amount to mint"
+  />
+  <select
+    value={mintType}
+    onChange={(e) => setMintType(e.target.value)}
+    style={{ marginRight: "10px" }}
+  >
+    <option value="Address">Address</option>
+    <option value="Contract">Contract</option>
+  </select>
+  <button
+    onClick={
+      mintType === "Address" ? handleMintToAddress : handleMintToContract
+    }
+  >
+    Mint New Tokens
+  </button>
+</div>
+```
+
+Here is how the UI would look like
+
+![Mint UI](https://raw.githubusercontent.com/RobinNagpal/fuel-token-track-docs/main/assets/images/mint_ui.png)
+
+#### Transferring Token:
 
 - Users can transfer tokens from their wallet to another address.
 - The `transferTo` field is for entering the recipient's address.
 - The `transferAmount` field specifies the number of tokens to transfer.
+- The `transferType` dropdown field allows users to specify if they want to transfer to an Address or a Contract.
 - The "Transfer Tokens" button initiates the transfer via the `handleTransferToAddress` function.
 
-#### Burning Section:
+```typescript
+<div className="form-field">
+  <input
+    type="text"
+    value={transferTo}
+    onChange={(e) => setTransferTo(e.target.value)}
+    placeholder="Address to transfer to"
+  />
+  <input
+    type="number"
+    value={transferAmount}
+    onChange={(e) => setTransferAmount(e.target.value)}
+    placeholder="Amount to transfer"
+  />
+  <select
+    value={mintType}
+    onChange={(e) => setTransferType(e.target.value)}
+    style={{ marginRight: "10px" }}
+  >
+    <option value="Address">Address</option>
+    <option value="Contract">Contract</option>
+  </select>
+  <button
+    onClick={
+      transferType === "Address"
+        ? handleTransferToAddress
+        : handleTransferToContract
+    }
+  >
+    Transfer Tokens
+  </button>
+</div>
+```
+
+Here is how the Transfer UI would look like
+
+![Transfer UI](https://raw.githubusercontent.com/RobinNagpal/fuel-token-track-docs/main/assets/images/transfer_ui.png)
+
+#### Burning Token:
 
 - Users can burn (destroy) tokens from their wallet.
 - The `burnAddress` field might automatically show a "burn" address where tokens are sent to be removed from circulation.
 - The `burnAmount` field lets users decide how many tokens to burn.
 - The "Burn Tokens" button starts the burning process with the `handleBurnFromAddress` function.
+
+```typescript
+<div className="form-field">
+            <input
+              type="number"
+              value={burnAmount}
+              onChange={(e) => setBurnAmount(e.target.value)}
+              placeholder="Amount to burn"
+            />
+            <button onClick={handleBurn}>Burn Tokens</button>
+          </div>
+```
+
+Here is how burn UI would look like
+
+![Burn UI](https://raw.githubusercontent.com/RobinNagpal/fuel-token-track-docs/main/assets/images/burn_ui.png)
 
 ### Installing the Fuel Browser Wallet
 
