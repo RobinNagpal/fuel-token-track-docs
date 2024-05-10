@@ -77,14 +77,13 @@ The `TokenTrackAbi__factory` class manages interactions with the `TokenTrackAbi`
 `static async deployContract(bytecode: BytesLike, wallet: Account, options: DeployContractOptions = {}): Promise<TokenTrackAbi>`: This method deploys a new instance of our contract. It takes the contract's bytecode, ABI, wallet details, and the storageSlots, ensuring correct storage layout. The method returns a promise resolving to a TokenTrackAbi object for the newly deployed instance.
 
 
-
 # Connecting Our Frontend to Fuel: Setting Up the Environment
 
-Now that we have a basic React application structure, let's integrate the necessary components to enable interaction with our Fuel smart contract. This section focuses on setting up the environment within our index.tsx file.
+Now that we have a basic React application structure, let's integrate the necessary components to interact with our Fuel smart contract. This section will focus on setting up the environment within our index.tsx file.
 
-1. Importing Required Modules:
+1. **Importing Required Modules:**
 
-At the beginning of the frontend/src/index.tsx file, we'll need to import the following modules:
+At the beginning of the frontend/src/index.tsx file, we need to import the following modules:
 
 ```typescript
 import { FuelProvider } from '@fuels/react';
@@ -96,21 +95,23 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 ```
 
-- FuelProvider: This component from @fuels/react wraps our entire application and provides the context for interacting with the Fuel network.
-- Wallet Connectors: These classes (imported from @fuels/connectors) facilitate connections between our application and different wallet types, allowing users to manage their FUEL tokens and interact with the contract.
-- QueryClient and QueryClientProvider: These components from @tanstack/react-query establish a context for managing data fetching and caching within our React application.
+- `FuelProvider`: This component from @fuels/react wraps our entire application and provides the context for interacting with the Fuel network.
+- `Wallet Connectors`: These classes (imported from @fuels/connectors) help connect our application with different wallet types, allowing users to manage their FUEL tokens and interact with the contract.
+- `QueryClient` and `QueryClientProvider`: These components from @tanstack/react-query set up a context for managing data fetching and caching within our React application.
 
-2. Creating a Query Client:
+2. **Creating a Query Client:**
+
    Create a new instance of the QueryClient class:
 
 ```typescript
 const queryClient = new QueryClient();
 ```
 
-This query client will assist with managing data fetching related to our smart contract interactions in our React application.
+This query client will help manage data fetching related to our smart contract interactions in our React application.
 
-3. Wrapping the App with Providers:
-   Next, modify the structure of the index.tsx file to wrap the main application component (App) with the FuelProvider and QueryClientProvider components. Here's the updated structure:
+3. **Wrapping the App with Providers:**
+
+   Next, modify the structure of the index.tsx file to wrap the main application component (App) with the FuelProvider and `QueryClientProvider` components. Here's the updated structure:
 
 ```typescript jsx
 <QueryClientProvider client={queryClient}>
@@ -128,14 +129,11 @@ This query client will assist with managing data fetching related to our smart c
 </QueryClientProvider>
 ```
 
-- `QueryClientProvider:` This component wraps the entire application and provides the queryClient context for data fetching.
+- `QueryClientProvider`: This component wraps the entire application and provides the queryClient context for data fetching.
+- `FuelProvider`: This component wraps our App component and sets up the context for connecting to the Fuel network. Inside the `FuelProvider`, we define a configuration object (fuelConfig) that outlines how our application will connect to the network and interact with wallets.
+    - The `connectors` property is an array containing instances of different wallet connector classes. These connectors enable users to connect their Fuel wallets to the application.
 
-- `FuelProvider:` This component wraps our App component and establishes the Fuel network connection context. Inside the FuelProvider, we define a configuration object (fuelConfig) that specifies how our application will connect to the network and interact with wallets
-  - The connectors property is an array containing instances of different wallet connector classes. These connectors allow users to connect their Fuel wallets to the application.
-
-Next up, we'll define the code and functions to interact with the contract.
-
-Let's establish a connection between the React application and our deployed smart contract. This connection will allow the application to call our contract's functions and retrieve data from the blockchain. The following code snippet demonstrates how we achieve this connection using the `useEffect` hook:
+Next, let's establish a connection between the React application and our deployed smart contract. This connection will allow the application to call our contract's functions and retrieve data from the blockchain. The following code snippet demonstrates how we achieve this connection using the `useEffect` hook:
 
 ```typescript
   useEffect(() => {
@@ -153,11 +151,12 @@ Let's establish a connection between the React application and our deployed smar
   }, [isConnected, wallet]);
 ```
 
-Now to call the `mint_to_address` function in our contract, we have handleMintToAddress function, which serves as the bridge between our user interface and the `mint_to_address` function defined in our Fuel smart contract.
+To call the `mint_to_address` function in our contract, we have the handleMintToAddress function, which serves as the
+bridge between our user interface and the `mint_to_address` function defined in our Fuel smart contract.
 
-## Functionality breakdown
+## Functionality Breakdown
 
-1. Contract Check
+1. **Contract Check**
 
 ```typescript
 if (!contract) {
@@ -165,20 +164,20 @@ if (!contract) {
 }
 ```
 
-- Before proceeding, the function ensures a successful connection to our Fuel smart contract. It checks if the contract object exists. If not, it displays an alert message informing the user that they cannot mint tokens yet.
+- Before starting, the function checks if there is a successful connection to our Fuel smart contract. If the contract object does not exist, it shows an alert message telling the user that they cannot mint tokens yet.
 
-2. Extracting Mint Address
+2. **Extracting Mint Address**
 
 ```typescript
 const address = Address.fromString(mintTo);
 const addressInput = { value: address.toB256() };
 ```
 
-- This section retrieves the mint address value from our application's state, stored in a variable named mintTo.
-- It utilizes the Address class from fuels to convert the user-provided address string into the Address object.
-- The converted address is then wrapped in an object (addressInput) to form `AddressInput` type.
+- This step retrieves the mint address from our application's state, stored in a variable named `mintTo`.
+- It uses the Address class from fuels to convert the user-provided address string into an Address object.
+- The converted address is then placed in an object (`addressInput`) to match the `AddressInput` type.
 
-3. Calling the Contract Function:
+3. **Calling the Contract Function:**
 
 ```typescript
 await contract.functions
@@ -190,16 +189,16 @@ await contract.functions
     .call();
 ```
 
-- The core functionality happens here. It utilizes the contract object to access the `mint_to_address` function defined in our smart contract.
-- Arguments for the function call are constructed:
-  - addressInput: The prepared address object containing the converted mint address.
-  - Number(mintAmount): The user-provided mint amount, converted to a number for the contract call.
-- Additionally, transaction parameters are set:
-  - gasPrice: A fixed gas price.
-  - gasLimit: A maximum amount of gas allowed for this transaction.
-- Finally, the .call() method executes the transaction, sending the mint request to the Fuel network.
+- The main action occurs here. It uses the contract object to call the `mint_to_address` function from our smart contract.
+- It sets up arguments for the function call:
+    - `addressInput`: The address object containing the converted mint address.
+    - `Number(mintAmount)`: The mint amount provided by the user, converted to a number.
+- It also sets transaction parameters:
+    - `gasPrice`: A fixed gas price.
+    - `gasLimit`: The maximum gas allowed for this transaction.
+- The `.call()` method executes the transaction, sending the mint request to the Fuel network.
 
-4. Error Handling:
+4. **Error Handling:**
 
 ```typescript
 catch (error) {
@@ -207,59 +206,58 @@ catch (error) {
 }
 ```
 
-- The function includes a `try...catch` block to handle any potential errors that might occur during the transaction, such as insufficient funds or invalid inputs. Errors are logged to the console for debugging purposes.
+- The function includes a `try...catch` block to manage any possible errors during the transaction, such as insufficient funds or invalid inputs. It logs errors to the console for debugging.
 
-5. Resetting Input Values:
+5. **Resetting Input Values:**
 
 ```typescript
 setMintTo("");
 setMintAmount("");
 ```
 
-- After successful execution (or catching an error), the function resets the user input fields for mintTo and mintAmount to an empty state, allowing the user to initiate a new mint request.
+- After the execution (or if an error is caught), the function resets the user input fields for `mintTo` and `mintAmount` to blank, allowing the user to make a new mint request.
 
-In essence, the `handleMintToAddress` function acts as the intermediary between the user interface and our smart contract. A similar kind of approach is followed by all other functions.
+Overall, the `handleMintToAddress` function serves as the link between the user interface and our smart contract, similar to how other functions operate.
 
 ## User Interface for Token Interactions
 
-This section delves into the user interface (UI) components that allow users to interact with our token functionalities. The provided code snippet showcases a form with various fields and buttons to enable minting, transferring, and burning tokens.
+This section discusses the user interface (UI) components that enable users to interact with token functionalities. The UI includes a form with fields and buttons for minting, transferring, and burning tokens.
 
 ### Form Breakdown:
 
-The form is divided into three sections: Minting, Transferring, and Burning. Each section allows users to specify the desired action and provides input fields for relevant data.
+The form has three sections: Minting, Transferring, and Burning. Each section is designed for specific token interactions:
 
 #### Minting Section:
 
-- This section allows users to mint new tokens and send them to a specified address.
-- Users can enter the recipient's address in the `mintTo` input field.
-- The mintAmount input field lets users specify the number of tokens they want to mint.
-- A dropdown menu (mintType) allows users to potentially choose between minting to Address and minting to Contract.
-- The "Mint New Tokens" button triggers the handleMintToAddress function to initiate the minting process.
+- Users can mint new tokens to a specified address.
+- The `mintTo` input field is where users enter the recipient's address.
+- The `mintAmount` field allows users to specify the number of tokens they wish to mint.
+- The "Mint New Tokens" button activates the `handleMintToAddress` function to start the minting process.
 
 #### Transferring Section:
 
-- This section enables users to transfer existing tokens from their wallet to another address.
-- Users provide the recipient's address in the transferTo input field.
-- The transferAmount input field specifies the number of tokens to transfer.
-- The "Transfer Tokens" button triggers the `handleTransferToAddress` function to execute the transfer transaction.
+- Users can transfer tokens from their wallet to another address.
+- The `transferTo` field is for entering the recipient's address.
+- The `transferAmount` field specifies the number of tokens to transfer.
+- The "Transfer Tokens" button initiates the transfer via the `handleTransferToAddress` function.
 
 #### Burning Section:
 
-- This section allows users to burn (destroy) a specified amount of tokens from their wallet.
-- The burnAddress input field might be pre-filled with a "burn" address where tokens are sent to be effectively removed from circulation.
-- The burnAmount input field specifies the number of tokens to burn.
-- A dropdown menu allows users to specify where to burn tokens from (Address or Contract).
-- The "Burn Tokens" button triggers the `handleBurnFromAddress` function to initiate the burning process.
+- Users can burn (destroy) tokens from their wallet.
+- The `burnAddress` field might automatically show a "burn" address where tokens are sent to be removed from circulation.
+- The `burnAmount` field lets users decide how many tokens to burn.
+- The "Burn Tokens" button starts the burning process with the `handleBurnFromAddress` function.
 
-# Install the Fuel Browser Wallet
+### Installing the Fuel Browser Wallet
 
-Our frontend application will allow users to connect with a wallet, so you'll need to have a browser wallet installed.
-Install the Fuel Wallet [here](https://chromewebstore.google.com/detail/fuel-wallet/dldjpboieedgcmpkchcjcbijingjcgok)
+To interact with the frontend application, a browser wallet is required. Install the Fuel Wallet [here](https://chromewebstore.google.com/detail/fuel-wallet/dldjpboieedgcmpkchcjcbijingjcgok).
 
-# Running the project
+### Running the Project
 
-Inside the `/frontend` directory run:
+To start the project, navigate to the `/frontend` directory and run:
 
 ```
 npm start
 ```
+
+This setup will launch the application and allow you to interact with the smart contract functionalities.
