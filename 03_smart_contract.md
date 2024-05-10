@@ -1,5 +1,6 @@
 # Create Smart Contract Project
-This section will guide us through creating a smart contract for the Token Track project, where we can mint, burn, and 
+
+This section will guide us through creating a smart contract for the Token Track project, where we can mint, burn, and
 track a user's token balance.
 
 Assuming you followed the steps mentioned in the previous sections, and have `contracts` and `frontend` directories in your
@@ -10,9 +11,11 @@ cd contracts
 ```
 
 ### Initialize a New Smart Contract
-We will be using `forc` to create a new smart contract. 
+
+We will be using `forc` to create a new smart contract.
 
 Open the terminal and run the following command:
+
 ```shell
 forc new TokenTrack
 ```
@@ -31,8 +34,8 @@ token-track
 
 ### `Forc.toml`
 
-`Forc.toml`is a mandatory manifest file for each package, written in TOML format. It includes fields such as 
-project details, dependencies, network information, build profiles, and other configurations essential for project 
+`Forc.toml`is a mandatory manifest file for each package, written in TOML format. It includes fields such as
+project details, dependencies, network information, build profiles, and other configurations essential for project
 setup.
 
 ### `src/main.sw`
@@ -41,8 +44,8 @@ This the file where all of the contract code will go.
 
 ### Sway
 
-The file `src/main.sw` uses the `.sw` suffix, indicating it's written in Sway, a programming language designed for 
-the FuelVM. Sway is statically typed and compiled, with type inference and traits. It aims to enhance the safety and 
+The file `src/main.sw` uses the `.sw` suffix, indicating it's written in Sway, a programming language designed for
+the FuelVM. Sway is statically typed and compiled, with type inference and traits. It aims to enhance the safety and
 performance of smart contract development through strong static analysis and compiler feedback.
 
 Let's examine the contents of `main.sw`.
@@ -53,26 +56,26 @@ The first line in the file is:
 contract
 ```
 
-In Sway, a program must declare its type, it can be a contract, a predicate, a script, or a library. Contracts, 
+In Sway, a program must declare its type, it can be a contract, a predicate, a script, or a library. Contracts,
 predicates, and scripts are deployable to the blockchain, while a library is for code reuse and isn't deployed directly.
 
-A Sway file begins by stating its type. A forc project can include many libraries but only one contract, script, or predicate. 
+A Sway file begins by stating its type. A forc project can include many libraries but only one contract, script, or predicate.
 Contracts are typically used for protocols or systems that adhere to a set of rules.
 
 The next element in `main.sw` is an ABI.
 
 ### ABI
 
-An ABI (Application Binary Interface) outlines an interface without including function bodies. A contract must define 
-or import an ABI declaration and implement it. It is best practice to define the ABI in a separate library and import 
+An ABI (Application Binary Interface) outlines an interface without including function bodies. A contract must define
+or import an ABI declaration and implement it. It is best practice to define the ABI in a separate library and import
 it into the contract. This allows others to import and use the ABI in their scripts to interact with the contract.
 
-Following the ABI in the `main.sw` file is the implementation of the ABI, where the functions defined in the ABI 
+Following the ABI in the `main.sw` file is the implementation of the ABI, where the functions defined in the ABI
 are actually written.
 
 # Token Track Contract
 
-This section guides us on how to write a contract for Token Track using the Fuel network with Sway. Here, we will 
+This section guides us on how to write a contract for Token Track using the Fuel network with Sway. Here, we will
 create a fungible token that includes several key functionalities necessary for managing a digital currency:
 
 - **Minting**: Generate and add new tokens to the circulation.
@@ -85,6 +88,7 @@ By following this guide and using the provided Sway code, we'll gain practical e
 Begin by clearing the file, keeping only the `contract` keyword, as we are drafting a contract.
 
 ## Storage
+
 Since we are developing a token, we need storage to track the total circulation and maintain a map of account balances that hold the token.
 
 Define a storage block with the following lines of code:
@@ -99,7 +103,7 @@ storage {
 }
 ```
 
-In smart contract development, persistent storage is crucial. It stores values within the contract itself, unlike 
+In smart contract development, persistent storage is crucial. It stores values within the contract itself, unlike
 temporary memory values which disappear after the contract finishes executing. Here, we define two storage variables:
 
 1. `balances`: A Storage Map that links identities to their balances.
@@ -107,8 +111,8 @@ temporary memory values which disappear after the contract finishes executing. H
 
 Let's clarify some terms:
 
-- **Identity**: An enum type that handles both `Address` and `ContractId` types, useful for identifying senders without 
- specifying if they are addresses or contracts. Here is how it's implemented:
+- **Identity**: An enum type that handles both `Address` and `ContractId` types, useful for identifying senders without
+  specifying if they are addresses or contracts. Here is how it's implemented:
 
   ```rust
   pub enum Identity {
@@ -117,16 +121,15 @@ Let's clarify some terms:
   }
   ```
 
-- **Storage Maps**: These are generic storage maps (StorageMap<K, V>) used for storing key-value pairs. They allow 
+- **Storage Maps**: These are generic storage maps (StorageMap<K, V>) used for storing key-value pairs. They allow
   functions like `insert()` and `get()` to manage values based on keys.
 
 - **u64**: A primitive data type in Sway, representing a 64-bit unsigned integer.
 
-
 ## ABI
-Next, we will define the ABI (Application Binary Interface) for our project. We will discuss the details of 
-each function when we implement them.
 
+Next, we will define the ABI (Application Binary Interface) for our project. We will discuss the details of
+each function when we implement them.
 
 ```rust
 // Define the contract's ABI (Application Binary Interface)
@@ -139,13 +142,9 @@ abi MyContract {
     #[storage(read, write)]
     fn mint_to_contract(recipient: ContractId, amount: u64);
 
-    // Function to burn tokens from a specific Address's balance
+    // Function to burn tokens
     #[storage(read, write)]
-    fn burn_from_address(target: Address, amount: u64);
-
-    // Function to burn tokens from a specific contract's balance
-    #[storage(read, write)]
-    fn burn_from_contract(target: ContractId, amount: u64);
+    fn burn_token(amount: u64);
 
     // Function to transfer tokens between two addresses
     #[storage(read, write)]
@@ -172,7 +171,7 @@ Now that we understand the ABI and storage, let's examine the `mint_to_address` 
 
 ### Minting Functionality
 
-This function is designed to create new tokens and add them directly to a specific address on the Fuel network. Here's 
+This function is designed to create new tokens and add them directly to a specific address on the Fuel network. Here's
 the essential code for the `mint_to_address` function:
 
 ```rust
@@ -202,7 +201,7 @@ Steps involved in the `mint_to_address` function:
 1. **Update Total Supply**: It reads the current total supply and adds the new tokens.
 2. **Mint and Update Balance**: It then updates the balance of the recipient, initializing it to 0 if not previously set, and adds the new tokens.
 
-This method for creating tokens is mirrored by the `mint_to_contract` function, which credits new tokens to a 
+This method for creating tokens is mirrored by the `mint_to_contract` function, which credits new tokens to a
 contract on the Fuel network.
 
 ### Burning Tokens from Addresses
@@ -216,42 +215,21 @@ Burning tokens reduces their total supply, making them unusable. This is often u
 Here's the core code for the `burn_from_address` function:
 
 ```rust
-#[storage(read, write)]
-fn burn_from_address(target: Address, amount: u64) {
-    // Read the current total supply from storage
-    storage
-        .total_supply
-        .write(storage.total_supply.read() - amount);
-
-    let b256_addr = target.into();
-    let identity: Identity = Identity::Address(Address::from(b256_addr));
-    // Access the target's balance or initialize it to 0 if it doesn't exist
-    let mut target_balance = storage.balances.get(identity).try_read().unwrap_or(0);
-
-    // Check sufficient balance before burning
-    assert(target_balance >= amount);
-
-    // Update the target's balance after burning
-    target_balance -= amount;
-
-    // Update the storage with the new balance
-    storage.balances.insert(identity, target_balance);
-}
+    // Implementation of the `burn_token` function
+    #[storage(read, write)]
+    fn burn_token(amount: u64) {
+        // Read the current total supply from storage
+        storage
+            .total_supply
+            .write(storage.total_supply.read() - amount);
+    }
 ```
 
-The function takes two parameters:
+The function takes a single parameter:
 
-- **target (Address)**: The address from which tokens will be burned.
 - **amount (u64)**: The quantity of tokens to burn.
 
-Steps involved in the `burn_from_address` function:
-
-1. **Update Total Supply**: It decreases the total supply by the amount to be burned.
-2. **Check and Update Balance**: Ensures the target has sufficient balance, then deducts the burned amount.
-3. **Record Updates**: Updates the storage with the decreased total supply and new balance.
-
-Similarly, the `burn_from_contract` function enables token burning from a contract on the Fuel network.
-
+There is only one step involved in the `burn_token` function, i.e., to decrease the total supply by the amount to be burned.
 
 ### Transferring Tokens to Addresses
 
@@ -348,39 +326,45 @@ A successful build will create a new directory named `out` within the contract f
 
 - **debug subdirectory:** This folder contains debugging information useful during development.
 
-    - **counter-contract-abi.json:** This file stores the contract's public Application Binary Interface (ABI) in JSON format, which describes how other applications and contracts can interact with it.
-    - **counter-contract-storage_slots.json:** This file details the storage layout of our contract, showing how data is stored on the blockchain.
-    - **counter-contract.bin:** The most important output, this file is the bytecode version of our Sway code, containing instructions that the Fuel network will execute upon deployment.
+  - **TokenTrack-contract-abi.json:** This file stores the contract's public Application Binary Interface (ABI) in JSON format, which describes how other applications and contracts can interact with it.
+  - **TokenTrack-contract-storage_slots.json:** This file details the storage layout of our contract, showing how data is stored on the blockchain.
+  - **TokenTrack-contract.bin:** The most important output, this file is the bytecode version of our Sway code, containing instructions that the Fuel network will execute upon deployment.
 
 ## Deploying the Contract
 
 With the contract built, the next step is to deploy it to the testnet. Here are the steps involved, including wallet setup and deployment commands:
 
 1. **Wallet Setup:**
-    - You need a Fuel wallet to pay for transaction fees.
-    - If you don’t have a wallet, the `forc deploy` command will guide you through creating one, which includes generating a secure seed phrase to keep confidential.
-    - Set a strong, unique password for your wallet when prompted.
+
+   - You need a Fuel wallet to pay for transaction fees.
+   - If you don’t have a wallet, the `forc deploy` command will guide you through creating one, which includes generating a secure seed phrase to keep confidential.
+   - Set a strong, unique password for your wallet when prompted.
 
 2. **Securing Funds (for Testnet Deployment):**
-    - We are deploying to a testnet, which uses fake currency (testnet FUEL tokens).
-    - Obtain testnet coins to cover deployment fees from the [beta-5 faucet](https://faucet-beta-5.fuel.network/).
+
+   - We are deploying to a testnet, which uses fake currency (testnet FUEL tokens).
+   - Obtain testnet coins to cover deployment fees from the [beta-5 faucet](https://faucet-beta-5.fuel.network/).
 
 3. **The Deployment Command:**
-    - With your wallet set up and funded, deploy the contract using:
-      ```shell
-      forc deploy --testnet
-      ```
+
+   - With your wallet set up and funded, deploy the contract using:
+     ```shell
+     forc deploy --testnet
+     ```
 
 4. **Wallet Interaction and Confirmation:**
-    - Enter your wallet password when prompted to unlock it and authorize the deployment.
-    - Choose the account for signing the deployment transaction by entering its index number.
-    - Confirm the deployment by typing Y (yes) when prompted.
+
+   - Enter your wallet password when prompted to unlock it and authorize the deployment.
+   - Choose the account for signing the deployment transaction by entering its index number.
+   - Confirm the deployment by typing Y (yes) when prompted.
 
 5. **Deployment Success and Information:**
-    - Upon successful deployment, you’ll receive:
-        - Network Endpoint: The URL of the Fuel network where the contract is deployed.
-        - Contract ID: A unique identifier for your contract on the blockchain.
-        - Deployed in Block: The blockchain block number that includes your transaction.
+   - Upon successful deployment, you’ll receive:
+     - Network Endpoint: The URL of the Fuel network where the contract is deployed.
+     - Contract ID: A unique identifier for your contract on the blockchain.
+     - Deployed in Block: The blockchain block number that includes your transaction.
+
+We have now seen how to deploy to the testnet, let us also see how we can deploy to a local node
 
 **Congratulations on building your first Fuel contract!**
 
