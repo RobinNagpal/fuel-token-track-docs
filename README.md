@@ -26,6 +26,7 @@ The full example is documented in four parts:
 
 # Pending work
 - [ ] Expand the frontend section by adding more code and explanations for the three functions.
+- [ ] Add code comments in the frontend code
 - [ ] Add information on funding the account, as this will be used to perform transactions.
 - [ ] Cross-check the code three times by starting from scratch.
 - [ ] Incentivize and ask a few developers to test it out and provide feedback.
