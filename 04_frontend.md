@@ -234,13 +234,13 @@ The form has three sections: Minting, Transferring, and Burning. Each section is
     type="text"
     value={mintTo}
     onChange={(e) => setMintTo(e.target.value)}
-    placeholder="Address to mint"
+    placeholder={`${mintType} to mint`}
   />
   <input
     type="number"
     value={mintAmount}
     onChange={(e) => setMintAmount(e.target.value)}
-    placeholder="Amount to mint"
+    placeholder="Tokens to mint"
   />
   <select
     value={mintType}
@@ -278,16 +278,16 @@ Here is how the UI would look like
     type="text"
     value={transferTo}
     onChange={(e) => setTransferTo(e.target.value)}
-    placeholder="Address to transfer to"
+    placeholder={`${transferType} to transfer to`}
   />
   <input
     type="number"
     value={transferAmount}
     onChange={(e) => setTransferAmount(e.target.value)}
-    placeholder="Amount to transfer"
+    placeholder="Tokens to transfer"
   />
   <select
-    value={mintType}
+    value={transferType}
     onChange={(e) => setTransferType(e.target.value)}
     style={{ marginRight: "10px" }}
   >
@@ -323,7 +323,7 @@ Here is how the Transfer UI would look like
     type="number"
     value={burnAmount}
     onChange={(e) => setBurnAmount(e.target.value)}
-    placeholder="Amount to burn"
+    placeholder="Tokens to burn"
   />
   <button onClick={handleBurn}>Burn Tokens</button>
 </div>
