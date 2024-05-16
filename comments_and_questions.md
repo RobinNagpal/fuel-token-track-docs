@@ -9,6 +9,7 @@
 7. what are we trying to achieve with fuel
 8. is it a l2 chain or a rollup
 9. what else can we achieve other than the current functions
+10. can we achieve the same thing we are doing using foundry
 
 # Issues
 
