@@ -25,4 +25,27 @@
 
 1. there should be usage examples as well for the frontend cause i dont know what address or contract ID to use
 2. indexing thing deprecated?
-3. getting Contract not loaded on any input
+3. getting "Contract not loaded" on any input (wallet is null)
+4. where are the minted tokens going? how to check them?
+5. add localhost address in wallet if running local node
+6. adding test eth to wallet (setting up wallet and using beta-faucet to credit eth)
+7. local deployment not working (only testnet for now)
+8. no need to select whether address or contractID, works either way for minting
+9. empty form submission gives console error
+10. mint/burn/transfer completion toast
+11. showing balance field is not showing value in decimals so currently showing '0'
+12. burn token doesnt take address (but using contractId behind the scene) so not clear whether burning from pool or a contract
+13. tokens are getting transfered to a fix account instead of the address i am passing
+
+# Explanation Improvement
+
+1. flow of executing the commands is not clear (like which directory), some deployment commands are to be run in contract itself and some in frontend
+2. if deployed on testnet or local node (using `forc-core run`), contractID wont come from contract-ids.json file while for deployment using `npx fuels@0.84.0 dev` or `npx fuels@0.84.0 build --deploy`, contract ID comes from contract-ids.json file
+3. connect with same wallet account which was used to create the wallet with `fuelup`
+4. on windows, project has to be cloned and run in wsl directory
+5. i guess we should create fuel config inside the frontend rather than root
+6. there should be a quick setup section for running the project after the first time
+7. i guess we should separate out information from the project setup steps as it breaks the flow
+8. currently there are only chunks of code given for the contract, there should be whole contract example as well
+9. fuel config explanation section should be in frontend and not in 02-problem
+10. for the useEffect section in 04-frontend, file is not specified
