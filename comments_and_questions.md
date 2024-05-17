@@ -36,6 +36,9 @@
 11. showing balance field is not showing value in decimals so currently showing '0'
 12. burn token doesnt take address (but using contractId behind the scene) so not clear whether burning from pool or a contract
 13. tokens are getting transfered to a fix account instead of the address i am passing
+14. when burn amount is more than the tokens in pool, fuel wallet crashes
+15. total number of minted tokens is not shown
+16. dropdown bug
 
 # Explanation Improvement
 
