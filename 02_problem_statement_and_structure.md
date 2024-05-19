@@ -42,6 +42,11 @@ The UI allows to:
 │   │   ├── index.tsx
 │   │   ├── logo.svg
 │   │   ├── react-app-env.d.ts
+|   |   ├── hooks
+|   |   │   ├── useActiveWallet.tsx
+|   |   │   ├── useBrowserWallet.tsx
+|   |   │   ├── useBurnerWallet.tsx
+|   |   │   └── useFaucet.tsx
 │   │   └── sway-api
 │   │       ├── contracts
 │   │       │   ├── TokenTrackAbi.d.ts
