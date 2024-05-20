@@ -129,6 +129,70 @@ This query client will help manage data fetching related to our smart contract i
 - `FuelProvider`: This component wraps our App component and sets up the context for connecting to the Fuel network. Inside the `FuelProvider`, we define a configuration object (fuelConfig) that outlines how our application will connect to the network and interact with wallets.
   - The `connectors` property is an array containing instances of different wallet connector classes. These connectors enable users to connect their Fuel wallets to the application.
 
+Now we'll create hooks for our walllet. There are two types of wallets:
+
+  1. Burner Wallet: A Burner wallet is embedded inside of the template app and stored in local storage.
+  2. Browser Wallet: A wallet connected via a browser extension like the Fuel Wallet.
+
+The following code defines a hook `useActiveWallet` which manages the active wallet within your Fuel Dapp:
+
+```typescript
+import { useEffect, useState } from "react";
+import { useBrowserWallet } from "./useBrowserWallet";
+import { useBurnerWallet } from "./useBurnerWallet";
+import { AppWallet } from "../lib";
+
+type WalletTypes = "burner" | "browser";
+
+export const useActiveWallet = (): AppWallet => {
+  const {
+    wallet: burnerWallet,
+    walletBalance: burnerWalletBalance,
+    refreshWalletBalance: refreshBurnerWalletBalance,
+  } = useBurnerWallet();
+  const {
+    wallet: browserWallet,
+    walletBalance: browserWalletBalance,
+    refreshWalletBalance: refreshBrowserWalletBalance,
+    isConnected: isBrowserWalletConnected,
+  } = useBrowserWallet();
+
+  const [activeWallet, setActiveWallet] = useState<WalletTypes>("burner");
+
+  useEffect(() => {
+    if (isBrowserWalletConnected) {
+      setActiveWallet("browser");
+      refreshBrowserWalletBalance?.();
+    } else {
+      setActiveWallet("burner");
+      refreshBurnerWalletBalance?.();
+    }
+  }, [isBrowserWalletConnected]);
+
+  return {
+    wallet: activeWallet === "browser" ? browserWallet : burnerWallet,
+    walletBalance:
+      activeWallet === "browser" ? browserWalletBalance : burnerWalletBalance,
+    refreshWalletBalance:
+      activeWallet == "browser"
+        ? refreshBrowserWalletBalance
+        : refreshBurnerWalletBalance,
+  };
+};
+```
+useActiveWallet leverages two sub-hooks, useBurnerWallet and useBrowserWallet, to handle both burner and browser-connected wallets seamlessly. It returns an object containing the following properties:
+
+- wallet: The currently active wallet object (either burnerWallet or browserWallet).
+- walletBalance: The balance of the currently active wallet.
+- refreshWalletBalance: A function to refresh the balance of the active wallet.
+
+## Functionality:
+
+- The hook initially sets the active wallet to "burner".
+- It uses a useEffect hook to monitor the isConnected state from useBrowserWallet.
+- If a browser wallet is connected (isConnected is true), the active wallet switches to "browser" and its balance is refreshed.
+- If no browser wallet is connected, the active wallet remains "burner" and its balance is refreshed.
+
 Next, let's establish a connection between the React application and our deployed smart contract. This connection will allow the application to call our contract's functions and retrieve data from the blockchain. The following code snippet demonstrates how we achieve this connection using the `useEffect` hook:
 
 ```typescript
