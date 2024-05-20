@@ -52,3 +52,24 @@
 8. currently there are only chunks of code given for the contract, there should be whole contract example as well
 9. fuel config explanation section should be in frontend and not in 02-problem
 10. for the useEffect section in 04-frontend, file is not specified
+
+# Issues with following the docs
+
+1. under creating a new project heading (in 02), `fuel.config.ts` is needed in frontend this is useless here `mkdir frontend` as its part of frontend setup, also this command requires the frontend setup first so to make sense of it `npx fuels@0.84.0 init --contracts ./contracts/TokenTrack/ --output ./frontend/src/sway-contracts-api`
+2. under heading Contract Code - Implementation of ABI (in 03), functions are shown but its not written that these functions needs to be inside `impl MyContract for Contract {}`
+3. this import `use std::{hash::Hash,};` is missing from docs
+4. command for creating the contract doesnt align with the directory change command later i.e., `forc new TokenTrack` & `cd token-track`
+5. not all functions' implementations are given so getting an error on building cause all the functions in the ABI are not implemented
+6. enum defined `Identity` is redundant
+7. `forc deploy` command doesnt took me through the process of wallet setup as written under Deploying on testnet (in 03) and gives error, so better to use `forc deploy --testnet` which will ask for wallet creation.
+8. `chainConfig.json` file setup is unclear
+9. we should write that these commands need to be on separate terminals `fuel-core run --db-type in-memory --debug` & `forc deploy --unsigned --node-url 127.0.0.1:4000/graphql`
+10. how to check wallet address? which i setup using `forc deploy --testnet`. confused between terminal wallet and fuel wallet
+11. folder name mismatch `sway-api` or `sway-contract-api` in 02 & 04
+12. this code is written in docs but its not present in the code, `The following code defines a hook useActiveWallet which manages the active wallet within your Fuel Dapp:`
+13. under Functionality heading (in 04), its not written which file to write code in
+14. the frontend code is more like explanation of the written code and not telling how to write
+15. some code is too naive like error handling heading, resetting values
+16. txParams error as gasPrice is not present in the type
+
+success dish moment daughter marine comfort fork use wild mention satisfy bread vacuum credit duck body diamond lonely demise capable carbon list able quality
