@@ -67,7 +67,7 @@ The UI allows to:
 - `contracts`: This holds the smart contract code. We'll discuss the details in the 'Smart Contract' section.
 - `frontend`: Here we'll find the frontend code. We'll dive into the frontend in the 'Frontend' section.
 - `fuels.config.ts`: This file contains the configuration for the Fuels CLI.
-- `chainConfig.json`: This file contains configuration for local node deployment.
+- `chainConfig.json`: This file contains configuration and data for local Fuel node deployment, where we will deploy our contracts and interact with them.
 
 # Creating a New Project
 
@@ -81,7 +81,7 @@ mkdir -p contracts/TokenTrack
 
 ```
 
-Now let's create the `fuels.config.ts` file in the root directory, which we will later use to create the types in the frontend corresponding to the contract.
+Now let's create the `fuels.config.ts` file in the root directory, which will later be used for building and deploying contracts as well as generating typed interface files for the frontend.
 
 ```bash
 npx fuels@0.82.0 init --contracts ./contracts/TokenTrack/ --output ./frontend/src/sway-contracts-api
@@ -162,4 +162,4 @@ Here is the [link](https://docs.fuel.network/docs/nightly/fuels-ts/fuels-cli/com
 
 # Output
 
-In this command `npx fuels@0.82.0 init --contracts ./contracts/TokenTrack/ --output ./frontend/src/sway-contracts-api`, the path we specified with the output flag will have the typed interface files for static type checking and error prevention in accordance with the contract which is helpful in frontend development.
+The output field in the `fuels.config.ts` file contains the path to the frontend directory where the typed interface files will be generated using the command `npx fuels@0.82.0 build`. This command will generate interface files which are derived from the contracts for static type checking and error prevention in the frontend development.

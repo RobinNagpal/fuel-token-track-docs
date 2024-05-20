@@ -50,17 +50,30 @@ performance of smart contract development through strong static analysis and com
 
 #### Contract Structure
 
-Sway contracts are structured in a specific way. They begin with a contract declaration, followed by an ABI (Application
+Sway contracts are structured in a specific way. They begin with a contract declaration, then imports and any struct to be used within the whole contract file, followed by an ABI (Application
 Binary Interface) definition, and then the contract and it's functions.
 
-```
-Contract Declaration
+```rust
+contract;   // This is the type of sway program
 
-Imports
+use std::{hash::Hash,}; // This imports from ...
+...  // Add any other imports here
 
-ABI
+// This is a struct accessible in the whole file
+storage {
 
-Contract
+}
+...   // Add any other structs
+
+// This is the ABI to be implemented by the Contract
+abi ContractAbi{
+
+}
+
+// This is the Contract implementing the ABI
+impl ContractAbi for Contract {
+
+}
 ```
 
 Let's examine the contents of `main.sw`.
@@ -461,15 +474,21 @@ But since we need some initial state of the chain, we must configure a `chainCon
 
 </details>
 
-To get coins in your wallet, add the following entry to the coins array with your wallet address in B256 type address (begins with 0x):
+To get coins in your wallet, add an entry to the coins array with your wallet address in B256 type address (begins with 0x):
 
 ```json
 {
-  "owner": "your wallet address",
+  "owner": "<YOUR_WALLET_ADDRESS>",
   "amount": "0x1000000000000000",
   "asset_id": "0x0000000000000000000000000000000000000000000000000000000000000000"
 }
 ```
+
+The coins array specifies the initial state of the local Fuel node which we are deploying. Each of its value contains three properties:
+
+- owner: The address of the wallet.
+- amount: The number of tokens, in hexadecimal format.
+- asset_id: The identifier for the asset type, typically zero for the base asset (e.g., Fuel)
 
 #### Check wallet address
 
@@ -479,7 +498,7 @@ You can check your wallet address by running the following command:
 forc wallet accounts
 ```
 
-Finally build and deploy the contracts using the dev command in the root directory:
+Finally build and deploy the contracts using the `dev` command in the root directory:
 
 ```shell
 npx fuels@0.82.0 dev
