@@ -75,7 +75,7 @@ Lets create the directory structure for the project.
 mkdir fuel-project
 cd fuel-project
 
-mkdir contracts
+mkdir -p contracts/TokenTrack
 mkdir frontend
 
 ```
@@ -131,64 +131,9 @@ and have specified the contracts field.
 
 For other properties in this file you can visit [here](https://docs.fuel.network/docs/nightly/fuels-ts/fuels-cli/config-file/)
 
-## Workspace
 
-Note: We'll briefly discuss the concept of a workspace here, as it's not used in this example. For more details, you
-can refer to [this](https://docs.fuel.network/docs/forc/workspaces/#workspaces)
-
-A workspace is a group of one or more packages, called workspace members, that are managed together.
-
-Workspace manifests are declared within `Forc.toml` files and appear like this:
-
-```toml
-[workspace]
-members = ["TokenTrack"]
-```
-
-We can use `forc` commands like `forc build`, `forc deploy`, etc. in the workspace directory to build and deploy all the
-members in the workspace.
-
-## Fuels CLI Commands
-
-Below are the useful commands that can be used with the Fuels CLI:
-
-#### 1. `fuels init`
-
-The `fuels init` command helps you create a sample `fuel.config.ts` file.
-
-#### 2. `fuels build`
-
-The `fuels build` command basically serves two purposes:
-
-- Building all Sway programs under your workspace using forc.
-- Generating types for them using fuels-typegen.
-
-```
-npx fuels@0.84.0 build --deploy
-```
-
-Using the `--deploy` flag will additionally:
-
-- Automatically start a short-lived fuel-core node if needed.
-- Run deploy on that node.
-
-### 3. `fuels deploy`
-
-The `fuels deploy` command does two things:
-
-1. Deploys all Sway contracts under the workspace.
-2. Saves their deployed IDs to: `{output_in_config_file}/contract-ids.json`
-
-```
-{
-  "myContract1": "0x..",
-  "myContract2": "0x.."
-}
-```
-
-Note: It is recommended to use the `fuels deploy` command only when deploying contracts to a local node. If you are deploying contracts to a live network like the Testnet, it is recommended to use the `forc deploy` command instead.
-
-### 4. `fuels dev`
+# Build and Deploy
+We will be using `fuels dev` command to build and deploy the contracts.
 
 ```
 npx fuels@0.84.0 dev
@@ -199,3 +144,14 @@ The `fuels dev` command does three things:
 1. Automatically starts a short-lived fuel-core node.
 2. Runs build and deploy once at the start.
 3. If autoStartFuelCore is enabled, it watches your Forc workspace and repeats the previous steps on every change.
+
+# Important Notes
+Some of the important points to note are:
+* In the `fuels.config.ts` file, we have specified the contracts and output fields, but we could have also specified the workspace field instead of the contracts field.
+For more information on the workspace field, you can visit [here](https://docs.fuel.network/docs/forc/workspaces/#workspaces).
+* Here we will be using Fuels CLI which wraps forc. `forc` commands like `forc build`, `forc deploy`, etc. can also be used directly for building and deploying contracts.
+* Some other important Fuels CLI commands are 
+  * `fuels build`: This command builds all Sway programs under your contracts using forc.
+  * `fuels deploy`: This command deploys all Sway contracts and saves their deployed IDs to: `{output_in_config_file}/contract-ids.json`. It is recommended to use the `fuels deploy` command only when deploying contracts to a local node. If you are deploying contracts to a live network like the Testnet, it is recommended to use the `forc deploy` command instead.
+
+Here is the [link](https://docs.fuel.network/docs/nightly/fuels-ts/fuels-cli/commands/) to the official documentation for the Fuels CLI commands.
