@@ -56,23 +56,29 @@ Binary Interface) definition, and then the contract and it's functions.
 ```rust
 contract;   // This is the type of sway program
 
-use std::{hash::Hash,}; // This imports from ...
+use std::{hash::Hash,}; // Import the Hash trait from standard library
 ...  // Add any other imports here
 
-// This is a struct accessible in the whole file
+// After imports, we declare globally accessible state variables and structures
+// E.g. storage is the persistent storage for storing values that are persisted inside the contract itself
 storage {
-
+    // Define your state variables here
+    // e.g., balance: u64;
 }
-...   // Add any other structs
+...   // Add any other structures or variables
 
 // This is the ABI to be implemented by the Contract
 abi ContractAbi{
-
+    // Define your function signatures here
+    // e.g., fn get_balance() -> u64;
 }
 
-// This is the Contract implementing the ABI
+// This is the Contract implementing the ABI defined above
 impl ContractAbi for Contract {
-
+    // Implement the functions defined in the ABI here
+    // e.g., fn get_balance() -> u64 {
+    //     self.balance
+    // }
 }
 ```
 
@@ -105,7 +111,7 @@ or import an ABI declaration and implement it. Best practice is to define the AB
 it into the contract. This allows others to import and use the ABI in their scripts to interact with the contract. It follows this structure:
 
 ```rust
-abi <ContractABIName> {
+abi TokenTrackAbi {
     // Function declarations
 }
 ```
@@ -117,7 +123,7 @@ After importing or declaring the ABI in the `main.sw` file, the contract's funct
 This section guides us on how to write a contract for Token Track Project using the Fuel network with Sway. It follows this structure:
 
 ```rust
-impl <ContractABIName> for <ContractName> {
+impl TokenTrackAbi for TokenTrack {
   // Function Implementations
 }
 ```
@@ -356,7 +362,7 @@ The `get_balance` function is read-only and does not modify the contract's stora
 
 The "Build" phase is essential in preparing our smart contract for deployment on the Fuel network. Smart contracts are typically written in high-level languages like Sway, which are easy to read and maintain. However, the Fuel network operates on bytecode, a low-level machine-readable format. Build process translates our Sway code into bytecode that the Fuel network can execute.
 
-For building and deploying all the contracts under the `contracts` folder, we are going to use the `dev` command from fuel which will build and deploy the contracts on the local node.
+To build and deploy all the contracts under the `contracts` folder, we will use the `fuels dev` command from `Fuel CLI`, which builds and deploys the contracts on the local Fuel node. This command should be run in the root directory, i.e., the folder containing `fuels.config.ts`.
 
 But since we need some initial state of the chain, we must configure a `chainConfig.json` file. Here is an example of what that looks like using version 0.22.1 of fuel-core:
 
@@ -488,7 +494,7 @@ The coins array specifies the initial state of the local Fuel node which we are 
 
 - owner: The address of the wallet.
 - amount: The number of tokens, in hexadecimal format.
-- asset_id: The identifier for the asset type, typically zero for the base asset (e.g., Fuel)
+- asset_id: The identifier for the asset type, typically zero for the base asset (e.g., ETH in our case)
 
 #### Check wallet address
 
@@ -498,7 +504,7 @@ You can check your wallet address by running the following command:
 forc wallet accounts
 ```
 
-Finally build and deploy the contracts using the `dev` command in the root directory:
+Finally build and deploy the contracts using the `fuels dev` command in the root directory:
 
 ```shell
 npx fuels@0.82.0 dev
