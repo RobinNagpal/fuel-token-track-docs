@@ -307,7 +307,7 @@ Some of the most used commands provided by forc are:
 - Explanation about the fuels sdk and why is it required, also explain the modifications in the index.tsx file, the providers and other changes
 - Instructions to generate contract types for type safety. There should be an explanation of the output files, what content do they contain.
   - fuels-config.ts
-  - sway-api folder
+  - sway-contracts-api folder
 - A step-by-step guide to explaining the frontend code.
 
 ### Installing the Browser Wallet
@@ -326,8 +326,7 @@ Some of the most used commands provided by forc are:
 Now that we have a contract built and deployed to the Fuel testnet, we now need a UI to interact with that contract. Fuel provide a typescript SDK to interact with the Fuel Blockchain. So we will be creating a frontend with the following tools:
 
 1. React (v18.3.1): A JavaScript library for building user interfaces.
-2. fuels (v0.84.0): A TypeScript SDK that simplifies interacting with Fuel contracts from the browser.
+2. fuels (v0.82.0): A TypeScript SDK that simplifies interacting with Fuel contracts from the browser.
 3. Fuel Browser
 
 Important: While using these specific versions is recommended for this guide, always double-check compatibility when working on your own projects. Refer to the official documentation for the latest supported versions.
-

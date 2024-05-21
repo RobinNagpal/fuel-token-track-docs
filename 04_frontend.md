@@ -1,12 +1,6 @@
 # Initializing the React App
 
-Let's begin by setting up the React application. First, navigate back to the main directory from `contracts/TokenTrack`:
-
-```shell
-cd ../..
-```
-
-Now, create a new React project:
+Let's begin by setting up the React application. Create a new React project in the root directory:
 
 ```shell
 npx create-react-app frontend --template typescript
@@ -16,7 +10,7 @@ cd frontend
 Next, install the fuels SDK:
 
 ```shell
-npm install fuels@0.84.0 @fuels/react@0.18.0 @fuels/connectors@0.2.2 @tanstack/react-query@5.28.9
+npm install fuels@0.82.0 @fuels/react@0.18.0 @fuels/connectors@0.2.2 @tanstack/react-query@5.28.9
 ```
 
 # Generating Contract Types
@@ -25,12 +19,12 @@ We have already added the configuration for fuels in the `fuels.config.ts` file.
 
 ```shell
 cd ..
-npx fuels@0.84.0 build
+npx fuels@0.82.0 build
 ```
 
-This command generates the contract types in the path specified in the `fuels.config.ts` file, which for us will be `frontend/src/sway-api`.
+This command generates the contract types in the path specified in the `fuels.config.ts` file, which is `frontend/src/sway-contracts-api` in our case.
 
-The generated files include:
+The generated file structure would look like this:
 
 ```
 .
@@ -135,10 +129,16 @@ This query client will help manage data fetching related to our smart contract i
 - `FuelProvider`: This component wraps our App component and sets up the context for connecting to the Fuel network. Inside the `FuelProvider`, we define a configuration object (fuelConfig) that outlines how our application will connect to the network and interact with wallets.
   - The `connectors` property is an array containing instances of different wallet connector classes. These connectors enable users to connect their Fuel wallets to the application.
 
-Now we'll create hooks for our walllet. There are two types of wallets:
+Now we'll create hooks for our wallet. Create a folder for holding all the customs hooks and create new file for each hook in it.
 
-  1. Burner Wallet: A Burner wallet is embedded inside of the template app and stored in local storage.
-  2. Browser Wallet: A wallet connected via a browser extension like the Fuel Wallet.
+```shell
+mkdir src/hooks
+```
+
+There are two types of wallets:
+
+1. Burner Wallet: A Burner wallet is embedded inside of the template app and stored in local storage.
+2. Browser Wallet: A wallet connected via a browser extension like the Fuel Wallet.
 
 The following code defines a hook `useActiveWallet` which manages the active wallet within your Fuel Dapp:
 
@@ -186,6 +186,7 @@ export const useActiveWallet = (): AppWallet => {
   };
 };
 ```
+
 useActiveWallet leverages two sub-hooks, useBurnerWallet and useBrowserWallet, to handle both burner and browser-connected wallets seamlessly. It returns an object containing the following properties:
 
 - wallet: The currently active wallet object (either burnerWallet or browserWallet).
@@ -199,7 +200,7 @@ useActiveWallet leverages two sub-hooks, useBurnerWallet and useBrowserWallet, t
 - If a browser wallet is connected (isConnected is true), the active wallet switches to "browser" and its balance is refreshed.
 - If no browser wallet is connected, the active wallet remains "burner" and its balance is refreshed.
 
-Next, let's establish a connection between the React application and our deployed smart contract. This connection will allow the application to call our contract's functions and retrieve data from the blockchain. The following code snippet demonstrates how we achieve this connection using the `useEffect` hook:
+Next, let's establish a connection between the React application and our deployed smart contract in the `App.tsx` file. This connection will allow the application to call our contract's functions and retrieve data from the blockchain. The following code snippet demonstrates how we achieve this connection using the `useEffect` hook:
 
 ```typescript
 useEffect(() => {
@@ -301,29 +302,29 @@ The form has three sections: Minting, Transferring, and Burning. Each section is
 ```typescript jsx
 <div className="form-field">
   <input
-      type="text"
-      value={mintTo}
-      onChange={(e) => setMintTo(e.target.value)}
-      placeholder="Address to mint"
+    type="text"
+    value={mintTo}
+    onChange={(e) => setMintTo(e.target.value)}
+    placeholder={`${mintType} to mint`}
   />
   <input
-      type="number"
-      value={mintAmount}
-      onChange={(e) => setMintAmount(e.target.value)}
-      placeholder="Amount to mint"
+    type="number"
+    value={mintAmount}
+    onChange={(e) => setMintAmount(e.target.value)}
+    placeholder="Tokens to mint"
   />
   <select
-      value={mintType}
-      onChange={(e) => setMintType(e.target.value)}
-      style={{marginRight: "10px"}}
+    value={mintType}
+    onChange={(e) => setMintType(e.target.value)}
+    style={{ marginRight: "10px" }}
   >
     <option value="Address">Address</option>
     <option value="Contract">Contract</option>
   </select>
   <button
-      onClick={
-        mintType === "Address" ? handleMintToAddress : handleMintToContract
-      }
+    onClick={
+      mintType === "Address" ? handleMintToAddress : handleMintToContract
+    }
   >
     Mint New Tokens
   </button>
@@ -345,31 +346,31 @@ Here is how the UI would look like
 ```typescript jsx
 <div className="form-field">
   <input
-      type="text"
-      value={transferTo}
-      onChange={(e) => setTransferTo(e.target.value)}
-      placeholder="Address to transfer to"
+    type="text"
+    value={transferTo}
+    onChange={(e) => setTransferTo(e.target.value)}
+    placeholder={`${transferType} to transfer to`}
   />
   <input
-      type="number"
-      value={transferAmount}
-      onChange={(e) => setTransferAmount(e.target.value)}
-      placeholder="Amount to transfer"
+    type="number"
+    value={transferAmount}
+    onChange={(e) => setTransferAmount(e.target.value)}
+    placeholder="Tokens to transfer"
   />
   <select
-      value={mintType}
-      onChange={(e) => setTransferType(e.target.value)}
-      style={{marginRight: "10px"}}
+    value={transferType}
+    onChange={(e) => setTransferType(e.target.value)}
+    style={{ marginRight: "10px" }}
   >
     <option value="Address">Address</option>
     <option value="Contract">Contract</option>
   </select>
   <button
-      onClick={
-        transferType === "Address"
-                ? handleTransferToAddress
-                : handleTransferToContract
-      }
+    onClick={
+      transferType === "Address"
+        ? handleTransferToAddress
+        : handleTransferToContract
+    }
   >
     Transfer Tokens
   </button>
@@ -390,10 +391,10 @@ Here is how the Transfer UI would look like
 ```typescript jsx
 <div className="form-field">
   <input
-      type="number"
-      value={burnAmount}
-      onChange={(e) => setBurnAmount(e.target.value)}
-      placeholder="Amount to burn"
+    type="number"
+    value={burnAmount}
+    onChange={(e) => setBurnAmount(e.target.value)}
+    placeholder="Tokens to burn"
   />
   <button onClick={handleBurn}>Burn Tokens</button>
 </div>
